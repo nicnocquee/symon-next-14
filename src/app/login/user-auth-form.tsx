@@ -16,18 +16,19 @@ import {
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { authenticate } from './authenticate';
+import { AlertDestructive } from '@/components/ui/alert';
 
-const formSchema = z.object({
+export const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string()
+  password: z.string().min(1, { message: 'Password is required' })
 });
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: ''
@@ -37,7 +38,21 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <Form {...form}>
-        <form className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(async (data) => {
+            const result = await authenticate(data);
+            form.setError('root', {
+              type: 'custom',
+              message: result.error.message
+            });
+          })}
+          className="space-y-4">
+          {form.formState.errors.root ? (
+            <AlertDestructive
+              title="Error"
+              message={form.formState.errors.root?.message || 'Something wrong'}
+            />
+          ) : null}
           <FormField
             control={form.control}
             name="email"

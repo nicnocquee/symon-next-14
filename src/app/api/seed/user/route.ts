@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 import { NextResponse } from 'next/server';
 
 export async function POST(_request: Request) {
-  const password = faker.internet.password();
+  const password = `abcd`;
   console.log(password);
   const user = await prismaClient.user.create({
     data: {
