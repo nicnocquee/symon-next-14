@@ -1,0 +1,6 @@
+.gitignore 
+*.png
+cypress/.DS_Store
+.DS_Store
+cypress/videos
+logs/

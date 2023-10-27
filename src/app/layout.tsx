@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
-import { GeistSans, GeistMono } from "geist/font";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { GeistSans, GeistMono } from 'geist/font';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Neosense",
-  description: "Synthetic monitoring by Hyperjump",
+  title: 'Neosense',
+  description: 'Synthetic monitoring by Hyperjump'
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
