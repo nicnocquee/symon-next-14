@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "status_page" ADD COLUMN     "updated_at" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

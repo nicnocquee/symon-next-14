@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "user" ALTER COLUMN "enabled" SET DEFAULT 1,
+ALTER COLUMN "suspended" SET DEFAULT 0;

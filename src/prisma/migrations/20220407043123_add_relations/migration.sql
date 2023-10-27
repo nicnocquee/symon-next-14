@@ -1,0 +1,8 @@
+-- AddForeignKey
+ALTER TABLE "tls_status" ADD FOREIGN KEY ("ownerId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tls_status" ADD FOREIGN KEY ("requestId") REFERENCES "request"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tls_status" ADD FOREIGN KEY ("probeId") REFERENCES "probe"("id") ON DELETE CASCADE ON UPDATE CASCADE;

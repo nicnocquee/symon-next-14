@@ -1,0 +1,553 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_DIRECT_URL")
+}
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+model apiKey {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  owner     String
+  apiKey    String   @unique
+  isEnabled Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  operator operator @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  monika   monika[]
+
+  @@map("api_key")
+}
+
+model location {
+  id          String  @id @default(uuid())
+  isp         String
+  city        String
+  code        String?
+  country     String
+  description String?
+  default     Boolean @default(false)
+
+  monikas monika[]
+
+  probes          locationProbe[]
+  event           event[]
+  probeAssignment probeAssignment[]
+}
+
+model locationProbe {
+  id         String   @id @default(uuid())
+  locationId String   @map("location_id")
+  probeId    String   @map("probe_id")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  location location @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  probe    probe    @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([locationId])
+  @@index([probeId])
+  @@map("location_probe")
+}
+
+enum MemberRole {
+  ADMIN
+  MANAGER
+  READER
+}
+
+model member {
+  id             String     @id @default(uuid())
+  role           MemberRole
+  userID         String     @map("user_id")
+  organizationID String     @map("organization_id")
+  projectID      String?    @map("project_id")
+  probeID        String?    @map("probe_id")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization organization @relation(fields: [organizationID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project      project?     @relation(fields: [projectID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  probe        probe?       @relation(fields: [probeID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user         user         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model organization {
+  id          String   @id @default(uuid())
+  nanoId      String?  @map("nano_id")
+  name        String
+  owner       String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user user @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  member             member[]
+  organizationMember organizationMember[]
+  project            project[]
+
+  @@index([nanoId])
+  @@index([owner])
+}
+
+model organizationMember {
+  id             String @id @default(uuid())
+  role           Role
+  userID         String @map("user_id")
+  organizationID String @map("organization_id")
+
+  user         user         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  organization organization @relation(fields: [organizationID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userID])
+  @@index([organizationID])
+  @@map("organization_member")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+enum RoleScope {
+  ORGANIZATION
+  ORGANIZATION_MEMBER
+  PROJECT
+  PROBE
+  API_KEY
+}
+
+enum RoleAction {
+  READ_ALL
+  READ_ONE
+  CREATE
+  UPDATE
+  DELETE
+  UPDATE_SELF
+  DELETE_SELF
+}
+
+model user {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  isEnabled   Int      @default(0) @map("is_enabled")
+  isSuspended Int      @default(0) @map("is_suspended")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization       organization[]
+  project            project[]
+  member             member[]
+  organizationMember organizationMember[]
+  userApiKey         userApiKey[]
+}
+
+model accessControl {
+  id        String     @id @default(uuid())
+  role      Role
+  scope     RoleScope
+  action    RoleAction
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("access_control")
+}
+
+model operator {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  apiKey apiKey[]
+}
+
+model project {
+  id             String   @id @default(uuid())
+  nanoId         String?  @map("nano_id")
+  name           String
+  description    String?
+  owner          String
+  organizationID String   @map("organization_id")
+  timezone       String   @default("Europe/London") // GMT+0
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization organization @relation(fields: [organizationID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user         user         @relation(fields: [owner], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  member member[]
+  probe  probe[]
+
+  @@index([nanoId])
+  @@index([organizationID])
+  @@index([owner])
+}
+
+enum ProbeStatus {
+  idle
+  healthy
+  incident
+}
+
+model probe {
+  id                String       @id @default(uuid())
+  nanoId            String?      @map("nano_id")
+  name              String
+  description       String?
+  totalIncident     Int?         @default(0)
+  isEnabled         Boolean      @default(true)
+  intervalSeconds   Int?         @map("interval_seconds")
+  incidentThreshold Int?         @map("incident_threshold")
+  recoveryThreshold Int?         @map("recovery_threshold")
+  status            ProbeStatus? @default(idle)
+  projectId         String       @map("project_id")
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  member              member[]
+  requests            request[]
+  notifications       notification[]
+  reportRequests      reportRequest[]
+  reportNotifications reportNotification[]
+
+  locations       locationProbe[]
+  timeSummary     timeSummary[]
+  statusPage      statusPage?
+  probeAssignment probeAssignment[]
+
+  @@index([nanoId])
+  @@index([projectId])
+}
+
+model request {
+  id        String           @id @default(uuid())
+  url       String?
+  method    String           @default("GET")
+  headers   Json?
+  ipAddress String?          @default("0.0.0.0") @db.Inet
+  port      Int?             @default(0)
+  body      String?
+  timeout   Int?
+  probeId   String
+  protocol  RequestProtocol? @default(http)
+  order     Int              @default(0)
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  probe  probe          @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  alerts requestAlert[]
+}
+
+enum RequestProtocol {
+  http
+  tcp
+}
+
+model requestAlert {
+  id        String   @id @default(uuid())
+  query     String
+  message   String?
+  requestId String   @map("request_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  request         request           @relation(fields: [requestId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  events          event[]
+  notificationLog notificationLog[]
+
+  @@map("request_alert")
+}
+
+model notification {
+  id      String @id @default(uuid())
+  type    String
+  data    Json?
+  probeId String
+
+  probe           probe             @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  notificationLog notificationLog[]
+}
+
+model notificationLog {
+  id             String   @id @default(uuid())
+  eventId        String
+  alertId        String
+  notificationId String
+  body           String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  notification notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event        event        @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  alert        requestAlert @relation(fields: [alertId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([eventId])
+  @@index([alertId])
+  @@index([notificationId])
+  @@map("notification_log")
+}
+
+model monika {
+  id                     String   @id @default(uuid())
+  hostname               String?
+  version                String?
+  publicIp               String   @map(name: "public_ip")
+  privateIp              String   @map(name: "private_ip")
+  port                   Int?     @default(22)
+  isp                    String
+  city                   String
+  country                String
+  os                     String
+  serverStatus           String?  @default("installing") @map(name: "server_status")
+  username               String?  @default("root")
+  macAddress             String   @map(name: "mac_address")
+  locationId             String?
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  status                 Boolean  @default(true)
+  lastReport             DateTime @default(now()) @map("last_report_at") @db.Timestamptz(3)
+  flags                  String   @default("--follow-redirects=0")
+  installedFromDashboard Boolean  @default(false) @map(name: "installed_from_dashboard")
+  apiKeyId               String?  @map("api_key_id") @db.Uuid
+  restartCount           Int?     @default(0) @map(name: "restart_count")
+
+  apiKey              apiKey?               @relation(fields: [apiKeyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  location            location?             @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  reports             report[]
+  events              event[]
+  timeSummary         timeSummary[]
+  monikaStatusHistory monikaStatusHistory[]
+  probeAssignment     probeAssignment[]
+}
+
+model probeAssignment {
+  id         String   @id @default(uuid())
+  probeId    String   @map("probe_id")
+  monikaId   String   @map("monika_id")
+  locationId String   @map("location_id")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  probe    probe    @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  monika   monika   @relation(fields: [monikaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  location location @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([monikaId, locationId, probeId])
+  @@map("probe_assignment")
+}
+
+model monikaStatusHistory {
+  id        String   @id @default(uuid())
+  status    Boolean  @default(true)
+  monikaId  String   @map("monika_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  monika monika @relation(fields: [monikaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("monika_status_history")
+}
+
+model event {
+  id          String    @id @default(uuid())
+  locationId  String
+  monikaId    String
+  alertId     String
+  event       String // incident | recovery
+  response    String    @default("")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  recoveredAt DateTime? @map("recovered_at") @db.Timestamptz(3)
+
+  location        location          @relation(fields: [locationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  monika          monika            @relation(fields: [monikaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  alert           requestAlert      @relation(fields: [alertId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  notificationLog notificationLog[]
+}
+
+model report {
+  id        String   @id @default(uuid())
+  monikaId  String   @map(name: "monika_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  requests      reportRequest[]
+  notifications reportNotification[]
+  monika        monika               @relation(fields: [monikaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model reportRequest {
+  id             String   @id @default(uuid())
+  reportId       String   @map(name: "report_id")
+  timestamp      Int
+  probeId        String   @map(name: "probe_id")
+  requestMethod  String   @map(name: "request_method")
+  requestUrl     String   @map(name: "request_url")
+  requestHeader  String?  @map(name: "request_header")
+  requestBody    String?  @map(name: "request_body")
+  responseStatus Int      @map(name: "response_status")
+  responseHeader String?  @map(name: "response_header")
+  responseBody   String?  @map(name: "response_body")
+  responseTime   Int      @map(name: "response_time")
+  responseSize   Int?     @map(name: "response_size")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  alerts reportRequestAlert[]
+  probe  probe                @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  report report               @relation(fields: [reportId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([probeId])
+  @@map("report_request")
+}
+
+model reportRequestAlert {
+  id              String   @id @default(uuid())
+  reportRequestId String   @map(name: "report_request_id")
+  alert           String
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  reportRequest reportRequest @relation(fields: [reportRequestId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("report_request_alert")
+}
+
+model reportNotification {
+  id             String   @id @default(uuid())
+  reportId       String   @map(name: "report_id")
+  timestamp      Int
+  probeId        String   @map(name: "probe_id")
+  alert          String
+  type           String
+  notificationId String   @map(name: "notification_id")
+  channel        String
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  report report @relation(fields: [reportId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  probe  probe  @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([probeId])
+  @@map("report_notification")
+}
+
+model token {
+  id        String   @id @default(uuid())
+  type      String
+  email     String
+  token     String
+  expiredAt DateTime @map("expired_at")
+  isUsed    Int      @default(0) @map("is_used")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+}
+
+model timeSummary {
+  id                    String   @id @default(uuid())
+  probeId               String   @map(name: "probe_id")
+  monikaId              String   @map(name: "monika_id")
+  year                  Int
+  month                 Int
+  date                  Int
+  week                  Int // iso week
+  weekYear              Int // iso week year. week year is not always the same with calendar year, e.g., Jan 1 2022 is 2021-W52
+  hour                  Int
+  totalResponseTime     Int      @map(name: "total_response_time")
+  count                 Int
+  incidentCount         Int      @map(name: "incident_count")
+  totalDowntimeInSecond Int      @map(name: "total_downtime_in_second")
+  createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  probe  probe  @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  monika monika @relation(fields: [monikaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([probeId, monikaId])
+  @@map("time_summary")
+}
+
+model testEmail {
+  id        String   @id @default(uuid())
+  body      String
+  to        String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("test_email")
+}
+
+model statusPage {
+  id        String   @id @default(uuid())
+  uniqueKey String   @map(name: "unique_key")
+  password  String
+  probeId   String   @unique @map(name: "probe_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(3)
+
+  probe probe @relation(fields: [probeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([uniqueKey])
+  @@map("status_page")
+}
+
+model configInterval {
+  id              String   @id @default(uuid())
+  intervalSeconds Int      @unique @map(name: "interval_seconds")
+  isDefault       Boolean  @map(name: "is_default")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("config_interval")
+}
+
+model tlsStatus {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  url       String
+  isValid   Boolean
+  expiredAt DateTime
+
+  @@index([url])
+  @@map("tls_status")
+}
+
+model invitationMember {
+  id             String   @id @default(uuid())
+  email          String
+  organizationID String   @map("organization_id")
+  role           String
+  invitorID      String   @map("invitor_id")
+  assignments    Json?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("invitation_member")
+}
+
+model userApiKey {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  key       String   @unique
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("user_api_key")
+}

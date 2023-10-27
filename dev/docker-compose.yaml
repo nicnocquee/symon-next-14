@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: symon-sass-postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: symon
+      POSTGRES_USER: symon
+      POSTGRES_DB: symon
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    restart: unless-stopped
+  redis:
+    image: 'redis:alpine'
+    container_name: symon-sass-redis
+    command: redis-server
+    ports:
+      - '6379:6379'
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped
+  couchdb:
+    image: ibmcom/couchdb3
+    platform: linux/amd64
+    environment:
+      - COUCHDB_PASSWORD=symon
+      - COUCHDB_USER=symon
+    ports:
+      - '5984:5984'
+    volumes:
+      - ./couchdata:/opt/couchdb/data
+    restart: unless-stopped
+  initializer:
+    image: curlimages/curl
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - couchdb
+    command: [
+        'sh',
+        '-c',
+        "curl -X PUT http://symon:symon@couchdb:5984/_users && \
+        curl -X PUT http://symon:symon@couchdb:5984/_replicator && \
+        curl -X PUT http://symon:symon@couchdb:5984/_global_changes && \
+        curl -X PUT http://symon:symon@couchdb:5984/symon"
+      ]

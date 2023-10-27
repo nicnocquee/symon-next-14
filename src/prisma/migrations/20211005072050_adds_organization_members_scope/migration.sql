@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "RoleScope" ADD VALUE 'ORGANIZATION_MEMBER';
