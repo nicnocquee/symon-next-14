@@ -3,7 +3,7 @@ import { DashboardProvider } from './components/dashboard-context';
 import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
-import { EditProbeDialogButton } from './probe/[nanoid]/components/save-dialog-button';
+import { EditProbeDialogButton } from './probe/[nanoid]/components/save-probe-button';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (

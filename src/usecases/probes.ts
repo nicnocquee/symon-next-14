@@ -3,7 +3,7 @@
 import 'server-only';
 import { prismaClient } from '@/prisma/prisma-client';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
-import { serverActionError } from '@/lib/utils';
+import { serverActionError, sleep } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoId';
@@ -34,6 +34,7 @@ export const getProbe = async (nanoid: string) => {
 };
 
 export const deleteProbe = async (formData: FormData) => {
+  // await sleep(5);
   const id = formData.get('id')?.toString();
   await prismaClient.probe.delete({
     where: {
@@ -49,6 +50,7 @@ export const saveProbe = async (
   data: ReturnType<typeof saveProbeSchema.parse>
 ) => {
   let redirectTo = '';
+  //  await sleep(5);
   try {
     const { id, ...rest } = data;
     if (id) {

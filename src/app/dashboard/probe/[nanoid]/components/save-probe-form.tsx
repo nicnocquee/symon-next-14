@@ -47,6 +47,8 @@ export function SaveProbForm({
     defaultValues: initial
   });
 
+  const { isSubmitting } = form.formState;
+
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <Form {...form}>
@@ -82,7 +84,7 @@ export function SaveProbForm({
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -95,12 +97,15 @@ export function SaveProbForm({
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input disabled={isSubmitting} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <Button disabled={isSubmitting} form="save-edit-probe" type="submit">
+            Save
+          </Button>
         </form>
       </Form>
     </div>

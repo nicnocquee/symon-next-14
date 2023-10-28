@@ -1,6 +1,6 @@
 import { getProbe } from '@/usecases/probes';
 import { notFound } from 'next/navigation';
-import { EditProbeDialogButton } from './components/save-dialog-button';
+import { EditProbeDialogButton } from './components/save-probe-button';
 import { DeleteProbeDialog } from './components/delete-probe-button';
 
 const ProbePage = async ({

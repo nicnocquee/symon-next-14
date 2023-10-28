@@ -13,3 +13,11 @@ export const serverActionError = (message: string) => {
     data: null
   };
 };
+
+export const sleep = async (durationSeconds: number) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, durationSeconds * 1000);
+  });
+};

@@ -54,11 +54,6 @@ export function EditProbeDialogButton({
             }
           }}
         />
-        <DialogFooter>
-          <Button form="save-edit-probe" type="submit">
-            Save
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
