@@ -14,12 +14,14 @@ export const Sidebar = ({ children }: { children?: ReactNode }) => {
       {/* Mobile sidebar */}
       <div
         className={cn(
-          `bg-blue-200 w-64 p-4 block sm:hidden lg:hidden fixed left-0 top-0 bottom-0`,
+          'bg-black bg-opacity-50 block sm:hidden lg:hidden absolute top-0 left-0 right-0 bottom-0 w-full h-full',
           isSideBarOpen ? `sm:block` : `sm:hidden`
         )}>
-        {children}
-        <div className="absolute top-0 ">
-          <SidebarToggleButton />
+        <div className={`bg-blue-200 w-64 p-4 fixed left-0 top-0 bottom-0`}>
+          {children}
+          <div className="absolute top-0 left-full ">
+            <SidebarToggleButton />
+          </div>
         </div>
       </div>
     </>
@@ -29,7 +31,9 @@ export const Sidebar = ({ children }: { children?: ReactNode }) => {
 export const SidebarToggleButton = () => {
   const { isSideBarOpen, toggleSideBar } = useContext(DashboardContext);
   return (
-    <button className="ml-auto block lg:hidden" onClick={toggleSideBar}>
+    <button
+      className="ml-auto block lg:hidden text-white"
+      onClick={toggleSideBar}>
       {isSideBarOpen ? 'Close' : 'Open'}
     </button>
   );
