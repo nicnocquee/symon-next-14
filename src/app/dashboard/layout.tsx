@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import { DashboardProvider } from './components/dashboard-context';
 import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
-import { Sidebar, SidebarToggleButton } from './components/sidebar';
+import {
+  Sidebar,
+  SidebarToggleButton,
+  SidebarWithSheet
+} from './components/sidebar';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-screen flex-row">
       <DashboardProvider>
-        <Sidebar />
+        <SidebarWithSheet />
         <div className="flex flex-col flex-1">
           <Navigation>
             <NavLeft>
