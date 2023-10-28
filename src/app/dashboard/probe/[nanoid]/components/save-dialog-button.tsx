@@ -15,16 +15,21 @@ import { useState } from 'react';
 
 export function EditProbeDialogButton({
   initialData,
-  onFinishSaving
+  onFinishSaving,
+  className
 }: {
   initialData?: { name: string; description?: string; id?: string };
   onFinishSaving?: () => {};
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)} variant="outline">
+        <Button
+          onClick={() => setOpen(true)}
+          variant="outline"
+          className={className}>
           {initialData?.id ? 'Edit Monitor' : 'Add Monitor'}
         </Button>
       </DialogTrigger>

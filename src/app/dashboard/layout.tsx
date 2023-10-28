@@ -16,7 +16,9 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             </NavLeft>
             <NavMid>This is the title</NavMid>
             <NavRight>
-              <EditProbeDialogButton />
+              <EditProbeDialogButton
+                className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
+              />
               <Link className="[&>a]:underline" href="/api/logout">
                 Logout
               </Link>
