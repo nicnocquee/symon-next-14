@@ -6,12 +6,9 @@ import SidebarContent from './components/sidebar-content';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex min-h-screen flex-row">
-      <DashboardProvider>
-        <SidebarWithSheet>
-          <SidebarContent />
-        </SidebarWithSheet>
-        <div className="flex flex-col flex-1">
+    <DashboardProvider>
+      <div className="flex h-screen flex-col">
+        <div className="flex flex-col w-full">
           <Navigation>
             <NavLeft>
               <SidebarToggleButton />
@@ -23,10 +20,15 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
               </Link>
             </NavRight>
           </Navigation>
-          <div className="p-4">{children}</div>
         </div>
-      </DashboardProvider>
-    </div>
+        <div className="flex flex-row flex-1">
+          <SidebarWithSheet>
+            <SidebarContent />
+          </SidebarWithSheet>
+          <div>{children}</div>
+        </div>
+      </div>
+    </DashboardProvider>
   );
 };
 

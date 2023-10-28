@@ -35,7 +35,7 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="w-80 h-screen hidden lg:block">{children}</div>
+      <div className="w-80 hidden lg:block overflow-y-scroll">{children}</div>
 
       {/* Mobile sidebar */}
       <div className="block sm:hidden bg-blue-600">
