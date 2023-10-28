@@ -1,3 +1,5 @@
+'use client';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,9 +12,11 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import { deleteProbe } from '@/usecases/probes';
 
 export function DeleteProbeDialog({ id, name }: { id: string; name: string }) {
+  const { toast } = useToast();
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -24,7 +28,15 @@ export function DeleteProbeDialog({ id, name }: { id: string; name: string }) {
           <AlertDialogDescription>
             {`This action cannot be undone. This will permanently delete the "${name}" probe.`}
           </AlertDialogDescription>
-          <form id="delete-probe" action={deleteProbe}>
+          <form
+            id="delete-probe"
+            action={async (formData) => {
+              await deleteProbe(formData);
+              toast({
+                title: 'Success',
+                description: `Probe "${name}" deleted successfully`
+              });
+            }}>
             <input type="hidden" name="id" value={id} />
           </form>
         </AlertDialogHeader>
