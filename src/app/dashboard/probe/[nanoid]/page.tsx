@@ -22,7 +22,11 @@ const ProbePage = async ({
         <p className="text-lg text-muted-foreground">{probe.description}</p>
       ) : null}
       <EditProbeDialogButton
-        initialData={{ name: probe.name, description: probe.description || '' }}
+        initialData={{
+          name: probe.name,
+          id: probe.id,
+          description: probe.description || ''
+        }}
       />
     </div>
   );
