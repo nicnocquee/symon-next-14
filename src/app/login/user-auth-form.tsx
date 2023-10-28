@@ -16,7 +16,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { authenticate } from './authenticate';
+import { authenticate } from './action-authenticate';
 import { AlertDestructive } from '@/components/ui/alert';
 
 export const loginSchema = z.object({
