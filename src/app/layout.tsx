@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font';
+import { Inter } from 'next/font/google';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -7,13 +8,19 @@ export const metadata: Metadata = {
   description: 'Synthetic monitoring by Hyperjump'
 };
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter'
+});
+
 export default function RootLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={`${inter.variable}`}>
       <body className="min-h-screen bg-background antialiased">{children}</body>
     </html>
   );
