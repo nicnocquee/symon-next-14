@@ -25,14 +25,18 @@ export function EditProbeDialogButton({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button onClick={() => setOpen(true)} variant="outline">
-          Edit Monitor
+          {initialData?.id ? 'Edit Monitor' : 'Add Monitor'}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Monitor</DialogTitle>
+          <DialogTitle>
+            {initialData?.id ? 'Edit Monitor' : 'Add Monitor'}
+          </DialogTitle>
           <DialogDescription>
-            {`Make changes to your monitor here. Click save when you're done.`}
+            {initialData?.id
+              ? `Make changes to your monitor here. Click save when you're done.`
+              : `Add a new monitor here. Click save when you're done.`}
           </DialogDescription>
         </DialogHeader>
         <SaveProbForm

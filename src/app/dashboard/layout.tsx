@@ -3,6 +3,7 @@ import { DashboardProvider } from './components/dashboard-context';
 import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
+import { EditProbeDialogButton } from './probe/[nanoid]/components/save-dialog-button';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,6 +16,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             </NavLeft>
             <NavMid>This is the title</NavMid>
             <NavRight>
+              <EditProbeDialogButton />
               <Link className="[&>a]:underline" href="/api/logout">
                 Logout
               </Link>

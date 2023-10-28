@@ -7,6 +7,7 @@ import { serverActionError } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoId';
+import { redirect } from 'next/navigation';
 
 const _getProbes = async (userId: string) => {
   const probes = await prismaClient.probe.findMany({
@@ -35,10 +36,11 @@ export const getProbe = async (nanoid: string) => {
 export const saveProbe = async (
   data: ReturnType<typeof saveProbeSchema.parse>
 ) => {
+  let redirectTo = '';
   try {
     const { id, ...rest } = data;
     if (id) {
-      await prismaClient.probe.update({
+      const result = await prismaClient.probe.update({
         where: {
           id
         },
@@ -47,6 +49,7 @@ export const saveProbe = async (
         }
       });
       revalidatePath(`/dashboard/probe/${id}`);
+      return { data: result, error: null };
     } else {
       const user = await getLoggedInUser();
       if (!user) return serverActionError(`Need authentication`);
@@ -59,7 +62,7 @@ export const saveProbe = async (
 
       if (!project) return serverActionError(`Project not found`);
 
-      await prismaClient.probe.create({
+      const result = await prismaClient.probe.create({
         data: {
           ...rest,
           nanoId: nanoid(),
@@ -70,10 +73,18 @@ export const saveProbe = async (
           }
         }
       });
-      revalidatePath(`/dashboard`);
+      revalidatePath(`/dashboard/probe/${result.nanoId}`);
+      redirectTo = `/dashboard/probe/${result.nanoId}`;
     }
   } catch (error) {
     console.log(error);
     return serverActionError(`Cannot save probe`);
+  }
+
+  // redirect need to be outside try catch
+  // https://github.com/vercel/next.js/issues/49298#issuecomment-1537433377
+
+  if (redirectTo) {
+    redirect(redirectTo);
   }
 };

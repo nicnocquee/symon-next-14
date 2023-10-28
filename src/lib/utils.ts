@@ -9,6 +9,7 @@ export const serverActionError = (message: string) => {
   return {
     error: {
       message
-    }
+    },
+    data: null
   };
 };
