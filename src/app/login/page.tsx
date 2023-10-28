@@ -5,13 +5,17 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { UserAuthForm } from './user-auth-form';
+import { prismaClient } from '@/prisma/prisma-client';
 
 export const metadata: Metadata = {
-  title: 'Authentication',
+  title: 'Login',
   description: 'Authentication forms built using the components.'
 };
 
-export default function AuthenticationPage() {
+export default async function AuthenticationPage() {
+  // for demo purpose, show email of the first user
+  const user = await prismaClient.user.findFirst({});
+
   return (
     <>
       <div className="md:hidden">
@@ -73,7 +77,7 @@ export default function AuthenticationPage() {
                 Enter your email and password
               </p>
             </div>
-            <UserAuthForm />
+            <UserAuthForm initialEmail={user?.email} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{' '}
               <Link

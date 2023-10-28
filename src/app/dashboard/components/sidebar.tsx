@@ -35,10 +35,10 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="bg-gray-100 w-64 p-4 hidden lg:block">{children}</div>
+      <div className="w-96 h-screen hidden lg:block">{children}</div>
 
       {/* Mobile sidebar */}
-      <div className="block sm:hidden lg:hidden">
+      <div className="block sm:hidden bg-blue-600">
         <Sheet open={isSideBarOpen} onOpenChange={toggleSideBar}>
           <SheetContent side="left">{children}</SheetContent>
         </Sheet>

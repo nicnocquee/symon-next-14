@@ -24,13 +24,19 @@ export const loginSchema = z.object({
   password: z.string().min(1, { message: 'Password is required' })
 });
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  initialEmail?: string;
+}
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserAuthForm({
+  className,
+  initialEmail,
+  ...props
+}: UserAuthFormProps) {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      email: initialEmail ?? '',
       password: ''
     }
   });
@@ -41,10 +47,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <form
           onSubmit={form.handleSubmit(async (data) => {
             const result = await authenticate(data);
-            form.setError('root', {
-              type: 'custom',
-              message: result.error.message
-            });
+            if (result && result.error) {
+              form.setError('root', {
+                type: 'custom',
+                message: result.error.message
+              });
+            }
           })}
           className="space-y-4">
           {form.formState.errors.root ? (
