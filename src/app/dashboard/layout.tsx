@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { DashboardProvider } from './components/dashboard-context';
 import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
-import SidebarContent from './sidebar-content';
+import SidebarContent from './components/sidebar-content';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (

@@ -1,4 +1,3 @@
-import { Label } from '@/components/ui/label';
 import { getProbes } from '@/usecases/probes';
 import { getLoggedInUser } from '@/usecases/user';
 import Link from 'next/link';
@@ -10,7 +9,7 @@ const SidebarContent = async () => {
   }
   const probes = await getProbes(user.id);
   return (
-    <div className="flex flex-col p-2">
+    <div className="flex flex-col p-4">
       <div className="">
         <Link className="font-bold text-lg" href={'/dashboard'}>
           Monitors
