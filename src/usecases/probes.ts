@@ -19,3 +19,11 @@ const _getProbes = async (userId: string) => {
 };
 
 export const getProbes = cache(_getProbes, ['user-probes']);
+
+export const getProbe = async (nanoid: string) => {
+  return prismaClient.probe.findFirst({
+    where: {
+      nanoId: nanoid
+    }
+  });
+};
