@@ -1,6 +1,7 @@
 import { getProbe } from '@/usecases/probes';
 import { notFound } from 'next/navigation';
 import { EditProbeDialogButton } from './components/save-dialog-button';
+import { DeleteProbeDialog } from './components/delete-probe-button';
 
 const ProbePage = async ({
   params: { nanoid }
@@ -21,13 +22,17 @@ const ProbePage = async ({
       {probe.description ? (
         <p className="text-lg text-muted-foreground">{probe.description}</p>
       ) : null}
-      <EditProbeDialogButton
-        initialData={{
-          name: probe.name,
-          id: probe.id,
-          description: probe.description || ''
-        }}
-      />
+      <div className="flex flex-col space-y-2 items-start">
+        <EditProbeDialogButton
+          initialData={{
+            name: probe.name,
+            id: probe.id,
+            description: probe.description || ''
+          }}
+        />
+
+        <DeleteProbeDialog id={probe.id} name={probe.name} />
+      </div>
     </div>
   );
 };

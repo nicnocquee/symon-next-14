@@ -33,6 +33,18 @@ export const getProbe = async (nanoid: string) => {
   });
 };
 
+export const deleteProbe = async (formData: FormData) => {
+  const id = formData.get('id')?.toString();
+  await prismaClient.probe.delete({
+    where: {
+      id
+    }
+  });
+
+  revalidatePath(`/dashboard`);
+  redirect(`/dashboard`);
+};
+
 export const saveProbe = async (
   data: ReturnType<typeof saveProbeSchema.parse>
 ) => {
