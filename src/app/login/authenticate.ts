@@ -28,3 +28,8 @@ export const authenticate = async (data: {
   cookies().set(`user`, JSON.stringify({ id, name, email }));
   redirect(`/dashboard`);
 };
+
+export const logout = async () => {
+  cookies().delete(`user`);
+  redirect(`/`);
+};
