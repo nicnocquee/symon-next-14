@@ -1,11 +1,26 @@
 import Link from 'next/link';
-import { DashboardProvider } from './components/dashboard-context';
-import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
-import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
-import SidebarContent from './components/sidebar-content';
-import { EditProbeDialogButton } from './probe/[nanoid]/components/save-probe-button';
+import { DashboardProvider } from '../../../components/dashboard-context';
+import {
+  NavLeft,
+  NavMid,
+  NavRight,
+  Navigation
+} from '../../../components/navigation';
+import {
+  SidebarToggleButton,
+  SidebarWithSheet
+} from '../../../components/sidebar';
+import SidebarContent from '../../../components/sidebar-content';
+import { EditProbeDialogButton } from './components/save-probe-button';
+import ProbeTitle from './components/probe-title';
 
-const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({
+  children,
+  params
+}: {
+  children: React.ReactNode;
+  params: any;
+}) => {
   return (
     <DashboardProvider>
       <div className="flex h-screen flex-col">
@@ -14,7 +29,9 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             <NavLeft>
               <SidebarToggleButton />
             </NavLeft>
-            <NavMid>This is the title</NavMid>
+            <NavMid>
+              <ProbeTitle nanoid={params.nanoid} />
+            </NavMid>
             <NavRight>
               <EditProbeDialogButton
                 className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
