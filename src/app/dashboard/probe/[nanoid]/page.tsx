@@ -2,6 +2,8 @@ import { getProbe } from '@/usecases/probes';
 import { notFound } from 'next/navigation';
 import { EditProbeDialogButton } from './components/save-probe-button';
 import { DeleteProbeDialog } from './components/delete-probe-button';
+import Locations from './components/locations';
+import RefreshButton from './components/refresh-button';
 
 const ProbePage = async ({
   params: { nanoid }
@@ -14,7 +16,7 @@ const ProbePage = async ({
   }
 
   return (
-    <div className="py-4 space-y-2">
+    <div className="py-4 space-y-2 px-4 w-full">
       <span>Monitor {nanoid}</span>
       <h1 className="scroll-m-20 text-4xl font-bold tracking-tight">
         {probe.name}
@@ -22,6 +24,7 @@ const ProbePage = async ({
       {probe.description ? (
         <p className="text-lg text-muted-foreground">{probe.description}</p>
       ) : null}
+
       <div className="flex flex-col space-y-2 items-start">
         <EditProbeDialogButton
           initialData={{
@@ -32,6 +35,11 @@ const ProbePage = async ({
         />
 
         <DeleteProbeDialog id={probe.id} name={probe.name} />
+        <RefreshButton />
+      </div>
+
+      <div>
+        <Locations probe={probe} />
       </div>
     </div>
   );

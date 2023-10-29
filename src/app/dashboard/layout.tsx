@@ -32,7 +32,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
           <SidebarWithSheet>
             <SidebarContent />
           </SidebarWithSheet>
-          <div>{children}</div>
+          <div className="w-full">{children}</div>
         </div>
       </div>
     </DashboardProvider>

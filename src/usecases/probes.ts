@@ -27,14 +27,35 @@ const _getProbes = async (userId: string) => {
 };
 
 export const getProbes = cache(_getProbes, ['user-probes']);
+export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
 
-export const getProbe = async (nanoid: string) => {
+const _getProbe = async (nanoid: string) => {
+  console.log(`_getProbe`);
   return prismaClient.probe.findFirst({
     where: {
       nanoId: nanoid
+    },
+    include: {
+      locations: {
+        include: {
+          location: {
+            select: {
+              id: true,
+              city: true,
+              country: true
+            }
+          }
+        }
+      }
     }
   });
 };
+
+export const getProbe = cache(_getProbe, ['single-probe'], {
+  tags: ['current-probe'],
+  revalidate: 10 // seconds
+});
+export type getProbeType = Awaited<ReturnType<typeof getProbe>>;
 
 export const deleteProbe = async (formData: FormData) => {
   // await sleep(5);
