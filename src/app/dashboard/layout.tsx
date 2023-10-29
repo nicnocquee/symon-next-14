@@ -19,7 +19,10 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
               <EditProbeDialogButton
                 className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
               />
-              <Link className="[&>a]:underline" href="/api/logout">
+              <Link
+                prefetch={false}
+                className="[&>a]:underline"
+                href="/api/logout">
                 Logout
               </Link>
             </NavRight>
