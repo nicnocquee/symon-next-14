@@ -25,7 +25,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             </NavRight>
           </Navigation>
         </div>
-        <div className="flex flex-row flex-1">
+        <div className="flex flex-row flex-1 max-h-full">
           <SidebarWithSheet>
             <SidebarContent />
           </SidebarWithSheet>

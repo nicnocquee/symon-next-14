@@ -35,12 +35,16 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="w-80 hidden lg:block overflow-y-scroll">{children}</div>
+      <div className="w-80 hidden h-full lg:block overflow-y-scroll">
+        {children}
+      </div>
 
       {/* Mobile sidebar */}
-      <div className="block sm:hidden bg-blue-600">
+      <div className="block sm:hidden h-full">
         <Sheet open={isSideBarOpen} onOpenChange={toggleSideBar}>
-          <SheetContent side="left">{children}</SheetContent>
+          <SheetContent side="left">
+            <div className="overflow-y-scroll max-h-full">{children}</div>
+          </SheetContent>
         </Sheet>
       </div>
     </>
