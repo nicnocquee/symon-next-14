@@ -51,9 +51,8 @@ const _getProbe = async (nanoid: string) => {
   });
 };
 
-export const getProbe = cache(_getProbe, ['single-probe'], {
-  tags: ['current-probe'],
-  revalidate: 10 // seconds
+export const getProbe = cache(_getProbe, ['current-probe'], {
+  tags: ['current-probe']
 });
 export type getProbeType = Awaited<ReturnType<typeof getProbe>>;
 
@@ -86,7 +85,7 @@ export const saveProbe = async (
           ...rest
         }
       });
-      revalidatePath(`/dashboard/probe/${id}`);
+      revalidatePath(`/dashboard/probe/${result.nanoId}`);
       return { data: result, error: null };
     } else {
       const user = await getLoggedInUser();
