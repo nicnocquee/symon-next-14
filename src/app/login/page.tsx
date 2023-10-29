@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function AuthenticationPage() {
   // for demo purpose, show email of the first user
-  const user = await prismaClient.user.findFirst({});
+  const users = await prismaClient.user.findMany({ take: 3 });
 
   return (
     <>
@@ -62,6 +62,12 @@ export default async function AuthenticationPage() {
             Neosense
           </Link>
           <div className="relative z-20 mt-auto">
+            <div>
+              <p>Demo users:</p>
+              {users.map((u) => {
+                return <p key={u.id}>{u.email}</p>;
+              })}
+            </div>
             <blockquote className="space-y-2">
               <p className="text-lg">Hyperjump X Biznet &copy; 2023</p>
             </blockquote>
@@ -77,7 +83,7 @@ export default async function AuthenticationPage() {
                 Enter your email and password
               </p>
             </div>
-            <UserAuthForm initialEmail={user?.email} />
+            <UserAuthForm initialEmail={users?.[0].email} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{' '}
               <Link
