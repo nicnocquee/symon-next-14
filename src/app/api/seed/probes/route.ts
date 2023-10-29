@@ -1,16 +1,18 @@
 import { prismaClient } from '@/prisma/prisma-client';
-import { faker } from '@faker-js/faker';
 import { notFound } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import { nanoid } from 'nanoId';
 import z from 'zod';
+import { urls } from './urls';
+import pLimit from 'p-limit';
+
+const limit = pLimit(10);
 
 export async function POST(request: Request) {
   const formData = await request.json();
   const validated = z
     .object({
-      userId: z.string().min(1),
-      count: z.coerce.number().min(1).default(1)
+      userId: z.string().min(1)
     })
     .safeParse(formData);
 
@@ -18,7 +20,7 @@ export async function POST(request: Request) {
     notFound();
   }
 
-  const { userId, count } = validated.data;
+  const { userId } = validated.data;
 
   const user = await prismaClient.user.findFirst({
     where: {
@@ -66,20 +68,37 @@ export async function POST(request: Request) {
     });
   }
 
-  const probes = await Promise.allSettled(
-    Array.from(Array(count).keys()).map((i) => {
-      const website = faker.internet.domainName();
-      return prismaClient.probe.create({
-        data: {
-          name: website,
-          projectId: project!.id,
-          nanoId: nanoid(7)
-        }
+  const probes = await Promise.all(
+    urls.map((website) => {
+      return limit(() =>
+        prismaClient.probe.create({
+          data: {
+            name: website,
+            projectId: project!.id,
+            nanoId: nanoid(7)
+          }
+        })
+      );
+    })
+  );
+
+  const locations = await prismaClient.location.findMany({});
+  const result = await Promise.all(
+    locations.flatMap((l) => {
+      return probes.map((p) => {
+        return limit(() =>
+          prismaClient.locationProbe.create({
+            data: {
+              locationId: l.id,
+              probeId: p.id
+            }
+          })
+        );
       });
     })
   );
 
   return NextResponse.json({
-    result: probes.map((p) => (p.status === 'fulfilled' ? p.value : null))
+    result: probes
   });
 }
