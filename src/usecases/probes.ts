@@ -3,7 +3,7 @@
 import 'server-only';
 import { prismaClient } from '@/prisma/prisma-client';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
-import { serverActionError, sleep } from '@/lib/utils';
+import { serverActionError } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoId';
@@ -17,6 +17,9 @@ const _getProbes = async (userId: string) => {
           id: userId
         }
       }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   });
 
