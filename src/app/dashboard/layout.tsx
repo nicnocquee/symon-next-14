@@ -4,6 +4,7 @@ import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
 import { EditProbeDialogButton } from './probe/[nanoid]/components/save-probe-button';
+import NavTitle from './components/navigation-title-client';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
@@ -14,7 +15,9 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             <NavLeft>
               <SidebarToggleButton />
             </NavLeft>
-            <NavMid>This is the title</NavMid>
+            <NavMid>
+              <NavTitle />
+            </NavMid>
             <NavRight>
               <EditProbeDialogButton
                 className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
