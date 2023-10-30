@@ -1,13 +1,11 @@
 import { cn } from '@/lib/utils';
+import { getProbes, getProbesHealth } from '@/usecases/probes';
+import { getLoggedInUser } from '@/usecases/user';
 
-const MonitorHealth = async ({
-  getProbesHealths,
-  probeId
-}: {
-  probeId: string;
-  getProbesHealths: Promise<{ id: string; status: string }[]>;
-}) => {
-  const healths = await getProbesHealths;
+const MonitorHealth = async ({ probeId }: { probeId: string }) => {
+  const user = await getLoggedInUser();
+  const probes = await getProbes(user?.id!);
+  const healths = await getProbesHealth(probes.map((p) => p.id).join(','));
   const health = healths.find((h) => h.id === probeId);
 
   return (

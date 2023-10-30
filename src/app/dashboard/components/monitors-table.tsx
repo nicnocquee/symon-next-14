@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { getProbesHealth, getProbesType } from '@/usecases/probes';
+import { getProbesType } from '@/usecases/probes';
 import Link from 'next/link';
 import MonitorHealth from './monitor-health';
 import { Suspense } from 'react';
@@ -21,7 +21,6 @@ export function MonitorsTable({
   from: number;
   perPage: number;
 }) {
-  const probesHealths = getProbesHealth(probes.map((p) => p.id));
   return (
     <Table>
       <TableCaption>
@@ -47,10 +46,7 @@ export function MonitorsTable({
                 </TableCell>
                 <TableCell>
                   <Suspense fallback={<>Loading</>}>
-                    <MonitorHealth
-                      probeId={p.id}
-                      getProbesHealths={probesHealths}
-                    />
+                    <MonitorHealth probeId={p.id} />
                   </Suspense>
                 </TableCell>
               </TableRow>

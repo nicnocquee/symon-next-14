@@ -138,13 +138,14 @@ export const saveProbe = async (
   }
 };
 
-const _getProbesHealth = async (probeIds: string[]) => {
+const _getProbesHealth = async (probeIdStrings: string) => {
+  console.log(`_getProbesHealth`);
+
   await sleep(4);
 
   const statuses = ['Healthy', 'Incident'];
 
-  console.log(`_getProbesHealth`);
-
+  const probeIds = probeIdStrings.split(',');
   return probeIds.map((p) => {
     const random = Math.floor(Math.random() * statuses.length);
     return {
