@@ -7,6 +7,8 @@ import { buttonVariants } from '@/components/ui/button';
 import { UserAuthForm } from './user-auth-form';
 import { prismaClient } from '@/prisma/prisma-client';
 
+export const revalidate = 10;
+
 export const metadata: Metadata = {
   title: 'Login',
   description: 'Authentication forms built using the components.'
