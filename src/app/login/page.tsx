@@ -62,12 +62,14 @@ export default async function AuthenticationPage() {
             Neosense
           </Link>
           <div className="relative z-20 mt-auto">
-            <div>
-              <p>Demo users:</p>
-              {users.map((u) => {
-                return <p key={u.id}>{u.email}</p>;
-              })}
-            </div>
+            {users.length > 0 ? (
+              <div>
+                <p>Demo users:</p>
+                {users.map((u) => {
+                  return <p key={u.id}>{u.email}</p>;
+                })}
+              </div>
+            ) : null}
             <blockquote className="space-y-2">
               <p className="text-lg">Hyperjump X Biznet &copy; 2023</p>
             </blockquote>
@@ -83,7 +85,7 @@ export default async function AuthenticationPage() {
                 Enter your email and password
               </p>
             </div>
-            <UserAuthForm initialEmail={users?.[0].email} />
+            <UserAuthForm initialEmail={users?.[0]?.email} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{' '}
               <Link
