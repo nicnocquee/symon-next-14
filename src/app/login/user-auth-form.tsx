@@ -68,7 +68,11 @@ export function UserAuthForm({
               <FormItem>
                 <FormLabel>E-mail address</FormLabel>
                 <FormControl>
-                  <Input type="email" {...field} />
+                  <Input
+                    disabled={form.formState.isSubmitting}
+                    type="email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -81,13 +85,19 @@ export function UserAuthForm({
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input
+                    disabled={form.formState.isSubmitting}
+                    type="password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Login</Button>
+          <Button disabled={form.formState.isSubmitting} type="submit">
+            Login
+          </Button>
         </form>
       </Form>
     </div>
