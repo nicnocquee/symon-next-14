@@ -14,6 +14,7 @@ import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoId';
 import { redirect } from 'next/navigation';
+import * as z from 'zod';
 
 const _getProbes = async (userId: string) => {
   console.log(`__getProbes`);
@@ -190,3 +191,32 @@ export const getProbesHealth = cache(
   ['probes-health'],
   { tags: ['probes-health'], revalidate: 3 }
 );
+
+export const toggleProbe = async (formData: FormData) => {
+  const { probeId } = z
+    .object({ probeId: z.string().min(1) })
+    .parse(Object.fromEntries(formData.entries()));
+  const user = await getLoggedInUser();
+  const probe = await prismaClient.probe.findFirst({
+    where: {
+      id: probeId,
+      project: {
+        owner: user?.id
+      }
+    }
+  });
+  if (!probe) {
+    return serverActionError(`Probe not found`);
+  }
+  await prismaClient.probe.update({
+    where: {
+      id: probe?.id
+    },
+    data: {
+      isEnabled: !probe.isEnabled
+    }
+  });
+
+  revalidateTag('current-probe');
+  revalidateTag('user-probes'); // for the sidebar
+};

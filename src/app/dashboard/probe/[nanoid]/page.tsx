@@ -4,6 +4,7 @@ import { EditProbeDialogButton } from './components/save-probe-button';
 import { DeleteProbeDialog } from './components/delete-probe-button';
 import Locations from './components/locations';
 import RefreshButton from './components/refresh-button';
+import { ToggleEnable } from './components/toggle-enable';
 
 const ProbePage = async ({
   params: { nanoid }
@@ -24,6 +25,8 @@ const ProbePage = async ({
       {probe.description ? (
         <p className="text-lg text-muted-foreground">{probe.description}</p>
       ) : null}
+
+      <ToggleEnable probe={probe} />
 
       <div className="flex flex-col space-y-2 items-start">
         <EditProbeDialogButton

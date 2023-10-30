@@ -18,7 +18,12 @@ const SidebarContent = async () => {
       </div>
       {probes.map((p) => {
         return (
-          <SidebarContentLink key={p.id} name={p.name} nanoid={p.nanoId!} />
+          <SidebarContentLink
+            enabled={p.isEnabled}
+            key={p.id}
+            name={p.name}
+            nanoid={p.nanoId!}
+          />
         );
       })}
     </div>

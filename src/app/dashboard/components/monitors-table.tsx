@@ -7,10 +7,12 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { getProbesType } from '@/usecases/probes';
 import Link from 'next/link';
 import MonitorHealth from './monitor-health';
 import { Suspense } from 'react';
+import { cn } from '@/lib/utils';
 
 export function MonitorsTable({
   probes = [],
@@ -42,12 +44,20 @@ export function MonitorsTable({
               <TableRow key={p.id}>
                 <TableCell>{index + from + 1}</TableCell>
                 <TableCell className="font-medium underline">
-                  <Link href={`/dashboard/probe/${p.nanoId}`}>{p.name}</Link>
+                  <Link
+                    className={cn(p.isEnabled ? '' : 'italic text-slate-500')}
+                    href={`/dashboard/probe/${p.nanoId}`}>
+                    {p.name}
+                  </Link>
                 </TableCell>
                 <TableCell>
-                  <Suspense fallback={<>Loading</>}>
-                    <MonitorHealth probeId={p.id} />
-                  </Suspense>
+                  {p.isEnabled ? (
+                    <Suspense fallback={<>Loading</>}>
+                      <MonitorHealth probeId={p.id} />
+                    </Suspense>
+                  ) : (
+                    <Badge>Disabled</Badge>
+                  )}
                 </TableCell>
               </TableRow>
             );
