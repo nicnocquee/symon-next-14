@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:migrate:dev": "dotenv -e .env.local -- prisma migrate dev"
+    "prisma:migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
+    "prisma:generate": "dotenv -e .env.local -- prisma generate",
+    "prisma:migrate:deploy": "dotenv -e .env.local -- prisma migrate deploy",
+    "vercel-build": "npm run prisma:migrate:deploy && npm run prisma:generate && npm run build"
   },
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
