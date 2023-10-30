@@ -2,7 +2,11 @@
 
 import 'server-only';
 import { prismaClient } from '@/prisma/prisma-client';
-import { unstable_cache as cache, revalidatePath } from 'next/cache';
+import {
+  unstable_cache as cache,
+  revalidatePath,
+  revalidateTag
+} from 'next/cache';
 import { serverActionError } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
@@ -26,12 +30,12 @@ const _getProbes = async (userId: string) => {
   return probes;
 };
 
-export const getProbes = cache(_getProbes, ['user-probes']);
+export const getProbes = cache(_getProbes, ['user-probes'], {
+  tags: ['user-probes']
+});
 export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
 
 const _getProbe = async (nanoid: string) => {
-  // console.log(`_getProbe`);
-  //const start = performance.now();
   const probe = prismaClient.probe.findFirst({
     where: {
       nanoId: nanoid
@@ -50,8 +54,6 @@ const _getProbe = async (nanoid: string) => {
       }
     }
   });
-  // const end = performance.now();
-  // console.log(`Execution time: ${end - start} ms`);
 
   return probe;
 };
@@ -90,7 +92,8 @@ export const saveProbe = async (
           ...rest
         }
       });
-      revalidatePath(`/dashboard/probe/${result.nanoId}`);
+      revalidateTag(`current-probe`); // to refresh the main area of probe page
+      revalidateTag(`user-probes`); // to refresh the sidebar
       return { data: result, error: null };
     } else {
       const user = await getLoggedInUser();

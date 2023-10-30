@@ -15,7 +15,7 @@ const _probeSummaryForLocation = async (
 
   return {
     status: 'Healthy',
-    responseTime: 4.5,
+    responseTime: (Math.random() * 10 + 1).toFixed(2),
     lastCheck: format(subHours(new Date(), Math.random() * 5 + 1), 'PPP HH:mm')
   };
 };
@@ -24,7 +24,7 @@ export const probeSummaryForLocation = cache(
   _probeSummaryForLocation,
   ['probe-summary-location'],
   {
-    revalidate: 10, // seconds
+    revalidate: 5, // seconds
     tags: ['probe-summary-location']
   }
 );

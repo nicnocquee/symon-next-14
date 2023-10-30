@@ -24,7 +24,7 @@ const LocationPanelContent = ({
   city: string;
   status: string;
   lastCheck: string;
-  responseTime: number;
+  responseTime: string;
 }) => {
   return (
     <div className="p-2 border border-gray-200 rounded-md space-y-2">
