@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DashboardProvider } from './components/dashboard-context';
+import { DashboardLayoutProvider } from './components/dashboard-layout-context';
 import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
@@ -8,7 +8,7 @@ import NavTitle from './components/navigation-title-client';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
-    <DashboardProvider>
+    <DashboardLayoutProvider>
       <div className="flex h-screen flex-col">
         <div className="flex flex-col w-full">
           <Navigation>
@@ -38,7 +38,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
           <div className="w-full">{children}</div>
         </div>
       </div>
-    </DashboardProvider>
+    </DashboardLayoutProvider>
   );
 };
 

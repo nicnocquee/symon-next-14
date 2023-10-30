@@ -1,12 +1,12 @@
 'use client';
 
 import { ReactNode, useContext } from 'react';
-import { DashboardContext } from './dashboard-context';
+import { DashboardLayoutContext } from './dashboard-layout-context';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 export const Sidebar = ({ children }: { children?: ReactNode }) => {
-  const { isSideBarOpen } = useContext(DashboardContext);
+  const { isSideBarOpen } = useContext(DashboardLayoutContext);
   return (
     <>
       {/* Desktop sidebar */}
@@ -30,7 +30,7 @@ export const Sidebar = ({ children }: { children?: ReactNode }) => {
 };
 
 export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
-  const { isSideBarOpen, toggleSideBar } = useContext(DashboardContext);
+  const { isSideBarOpen, toggleSideBar } = useContext(DashboardLayoutContext);
 
   return (
     <>
@@ -52,7 +52,7 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
 };
 
 export const SidebarToggleButton = () => {
-  const { isSideBarOpen, toggleSideBar } = useContext(DashboardContext);
+  const { isSideBarOpen, toggleSideBar } = useContext(DashboardLayoutContext);
   return (
     <button
       className="ml-auto block lg:hidden text-white"

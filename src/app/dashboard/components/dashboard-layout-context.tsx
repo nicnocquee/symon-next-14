@@ -2,21 +2,25 @@
 
 import { ReactNode, createContext, useState } from 'react';
 
-export const DashboardContext = createContext({
+export const DashboardLayoutContext = createContext({
   isSideBarOpen: true,
   toggleSideBar: () => {}
 });
 
-export const DashboardProvider = ({ children }: { children: ReactNode }) => {
+export const DashboardLayoutProvider = ({
+  children
+}: {
+  children: ReactNode;
+}) => {
   const [isSideBarOpen, setSideBarOpen] = useState(false);
 
   return (
-    <DashboardContext.Provider
+    <DashboardLayoutContext.Provider
       value={{
         isSideBarOpen,
         toggleSideBar: () => setSideBarOpen((curr) => !curr)
       }}>
       {children}
-    </DashboardContext.Provider>
+    </DashboardLayoutContext.Provider>
   );
 };
