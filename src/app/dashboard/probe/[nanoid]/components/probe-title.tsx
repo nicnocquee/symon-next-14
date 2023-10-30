@@ -2,7 +2,7 @@ import { getProbe } from '@/usecases/probes';
 
 const ProbeTitle = async ({ nanoid }: { nanoid?: string }) => {
   if (!nanoid) {
-    return <p>Neosense Monitors</p>;
+    return <p>No nano id</p>;
   }
   const probe = await getProbe(nanoid);
 

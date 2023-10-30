@@ -5,7 +5,7 @@ import { prismaClient } from '@/prisma/prisma-client';
 import { unstable_cache as cache, revalidatePath } from 'next/cache';
 import { serverActionError } from '@/lib/utils';
 import { getLoggedInUser } from './user';
-import { saveProbeSchema } from '@/app/dashboard/(with-params)/probe/[nanoid]/components/save-probe-form';
+import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoId';
 import { redirect } from 'next/navigation';
 
