@@ -17,6 +17,10 @@ import { redirect } from 'next/navigation';
 
 const _getProbes = async (userId: string) => {
   console.log(`__getProbes`);
+  const user = await getLoggedInUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
   const probes = await prismaClient.probe.findMany({
     where: {
       project: {
@@ -40,9 +44,16 @@ export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
 
 const _getProbe = async (nanoid: string) => {
   console.log(`_getProbe`);
+  const user = await getLoggedInUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
   const probe = prismaClient.probe.findFirst({
     where: {
-      nanoId: nanoid
+      nanoId: nanoid,
+      project: {
+        owner: user.id
+      }
     },
     include: {
       locations: {
@@ -69,10 +80,17 @@ export type getProbeType = Awaited<ReturnType<typeof getProbe>>;
 
 export const deleteProbe = async (formData: FormData) => {
   // await sleep(5);
+  const user = await getLoggedInUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
   const id = formData.get('id')?.toString();
   await prismaClient.probe.delete({
     where: {
-      id
+      id,
+      project: {
+        owner: user.id
+      }
     }
   });
 
@@ -83,6 +101,11 @@ export const deleteProbe = async (formData: FormData) => {
 export const saveProbe = async (
   data: ReturnType<typeof saveProbeSchema.parse>
 ) => {
+  const user = await getLoggedInUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+
   let redirectTo = '';
   //  await sleep(5);
   try {
@@ -90,7 +113,10 @@ export const saveProbe = async (
     if (id) {
       const result = await prismaClient.probe.update({
         where: {
-          id
+          id,
+          project: {
+            owner: user.id
+          }
         },
         data: {
           ...rest
@@ -100,9 +126,6 @@ export const saveProbe = async (
       revalidateTag(`user-probes`); // to refresh the sidebar
       return { data: result, error: null };
     } else {
-      const user = await getLoggedInUser();
-      if (!user) return serverActionError(`Need authentication`);
-
       const project = await prismaClient.project.findFirst({
         where: {
           owner: user.id
@@ -141,7 +164,14 @@ export const saveProbe = async (
 const _getProbesHealth = async (probeIdStrings: string) => {
   console.log(`_getProbesHealth`);
 
+  const user = await getLoggedInUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+
   await sleep(4);
+
+  // get the healths of the probes from db
 
   const statuses = ['Healthy', 'Incident'];
 
