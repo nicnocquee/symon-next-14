@@ -13,7 +13,7 @@ const SidebarContent = async () => {
     <div className="flex flex-col p-4">
       <div className="">
         <Link className="font-bold text-lg" href={'/dashboard'}>
-          Monitors
+          Monitors ({probes.length})
         </Link>
       </div>
       {probes.map((p) => {
