@@ -3,7 +3,6 @@ import { Switch } from '@/components/ui/switch';
 import { getProbeType, toggleProbe } from '@/usecases/probes';
 
 export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
-  console.log(probe);
   return (
     <div>
       <form action={toggleProbe} className="flex items-center space-x-2">
