@@ -7,6 +7,8 @@ import {
   revalidatePath,
   revalidateTag
 } from 'next/cache';
+import { cache as memoize } from 'react';
+
 import { serverActionError } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
@@ -30,7 +32,7 @@ const _getProbes = async (userId: string) => {
   return probes;
 };
 
-export const getProbes = cache(_getProbes, ['user-probes'], {
+export const getProbes = cache(memoize(_getProbes), ['user-probes'], {
   tags: ['user-probes']
 });
 export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
@@ -59,7 +61,7 @@ const _getProbe = async (nanoid: string) => {
   return probe;
 };
 
-export const getProbe = cache(_getProbe, ['current-probe'], {
+export const getProbe = cache(memoize(_getProbe), ['current-probe'], {
   tags: ['current-probe']
 });
 export type getProbeType = Awaited<ReturnType<typeof getProbe>>;

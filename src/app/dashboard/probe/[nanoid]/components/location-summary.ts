@@ -3,6 +3,7 @@
 import { sleep } from '@/lib/utils';
 import 'server-only';
 import { unstable_cache as cache } from 'next/cache';
+import { cache as memoize } from 'react';
 import { subHours, format } from 'date-fns';
 
 const _probeSummaryForLocation = async (
@@ -21,7 +22,7 @@ const _probeSummaryForLocation = async (
 };
 
 export const probeSummaryForLocation = cache(
-  _probeSummaryForLocation,
+  memoize(_probeSummaryForLocation),
   ['probe-summary-location'],
   {
     revalidate: 5, // seconds
