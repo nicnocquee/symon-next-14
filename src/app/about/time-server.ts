@@ -2,7 +2,7 @@
 
 import { unstable_cache as cache } from 'next/cache';
 import { cache as memoize } from 'react';
-import { nanoid } from 'nanoId';
+import { nanoid } from 'nanoid';
 
 const _getServerTime = async (userId: string) => {
   console.log(`_getServerTime`);

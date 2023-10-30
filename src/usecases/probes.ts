@@ -12,7 +12,7 @@ import { cache as memoize } from 'react';
 import { serverActionError, sleep } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
-import { nanoid } from 'nanoId';
+import { nanoid } from 'nanoid';
 import { redirect } from 'next/navigation';
 import * as z from 'zod';
 

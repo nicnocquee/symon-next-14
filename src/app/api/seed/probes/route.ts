@@ -1,7 +1,7 @@
 import { prismaClient } from '@/prisma/prisma-client';
 import { notFound } from 'next/navigation';
 import { NextResponse } from 'next/server';
-import { nanoid } from 'nanoId';
+import { nanoid } from 'nanoid';
 import z from 'zod';
 import { urls } from './urls';
 import pLimit from 'p-limit';
