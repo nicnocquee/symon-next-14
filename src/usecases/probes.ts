@@ -36,6 +36,7 @@ export const getProbes = cache(_getProbes, ['user-probes'], {
 export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
 
 const _getProbe = async (nanoid: string) => {
+  console.log(`_getProbe`);
   const probe = prismaClient.probe.findFirst({
     where: {
       nanoId: nanoid

@@ -4,11 +4,17 @@ import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
 import { EditProbeDialogButton } from './probe/[nanoid]/components/save-probe-button';
-import NavTitle from './components/navigation-title-client';
 import { getProbes } from '@/usecases/probes';
 import { getLoggedInUser } from '@/usecases/user';
+import { ReactNode } from 'react';
 
-const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({
+  children,
+  probename
+}: {
+  children: ReactNode;
+  probename: ReactNode;
+}) => {
   const user = await getLoggedInUser();
   const probes = user ? await getProbes(user?.id) : [];
 
@@ -20,9 +26,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             <NavLeft>
               <SidebarToggleButton />
             </NavLeft>
-            <NavMid>
-              <NavTitle />
-            </NavMid>
+            <NavMid>{probename}</NavMid>
             <NavRight>
               <EditProbeDialogButton
                 className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
