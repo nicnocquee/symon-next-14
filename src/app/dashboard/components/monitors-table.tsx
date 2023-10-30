@@ -7,8 +7,10 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { getProbesType } from '@/usecases/probes';
+import { getProbesHealth, getProbesType } from '@/usecases/probes';
 import Link from 'next/link';
+import MonitorHealth from './monitor-health';
+import { Suspense } from 'react';
 
 export function MonitorsTable({
   probes = [],
@@ -19,6 +21,7 @@ export function MonitorsTable({
   from: number;
   perPage: number;
 }) {
+  const probesHealths = getProbesHealth(probes.map((p) => p.id));
   return (
     <Table>
       <TableCaption>
@@ -42,7 +45,14 @@ export function MonitorsTable({
                 <TableCell className="font-medium underline">
                   <Link href={`/dashboard/probe/${p.nanoId}`}>{p.name}</Link>
                 </TableCell>
-                <TableCell>Healthy</TableCell>
+                <TableCell>
+                  <Suspense fallback={<>Loading</>}>
+                    <MonitorHealth
+                      probeId={p.id}
+                      getProbesHealths={probesHealths}
+                    />
+                  </Suspense>
+                </TableCell>
               </TableRow>
             );
           })}

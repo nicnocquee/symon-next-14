@@ -9,7 +9,7 @@ import {
 } from 'next/cache';
 import { cache as memoize } from 'react';
 
-import { serverActionError } from '@/lib/utils';
+import { serverActionError, sleep } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoId';
@@ -137,3 +137,25 @@ export const saveProbe = async (
     redirect(redirectTo);
   }
 };
+
+const _getProbesHealth = async (probeIds: string[]) => {
+  await sleep(4);
+
+  const statuses = ['Healthy', 'Incident'];
+
+  console.log(`_getProbesHealth`);
+
+  return probeIds.map((p) => {
+    const random = Math.floor(Math.random() * statuses.length);
+    return {
+      id: p,
+      status: statuses[random]
+    };
+  });
+};
+
+export const getProbesHealth = cache(
+  memoize(_getProbesHealth),
+  ['probes-health'],
+  { tags: ['probes-health'], revalidate: 3 }
+);
