@@ -16,6 +16,7 @@ import { nanoid } from 'nanoId';
 import { redirect } from 'next/navigation';
 
 const _getProbes = async (userId: string) => {
+  console.log(`__getProbes`);
   const probes = await prismaClient.probe.findMany({
     where: {
       project: {

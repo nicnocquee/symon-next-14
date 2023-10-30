@@ -33,7 +33,7 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
   const { isSideBarOpen, toggleSideBar } = useContext(DashboardContext);
 
   return (
-    <>
+    <div>
       {/* Desktop sidebar */}
       <div className="w-80 hidden h-full lg:block overflow-y-scroll">
         {children}
@@ -47,7 +47,7 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
           </SheetContent>
         </Sheet>
       </div>
-    </>
+    </div>
   );
 };
 

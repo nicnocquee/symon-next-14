@@ -20,7 +20,7 @@ const DashboardLayout = async ({
 
   return (
     <DashboardLayoutProvider probes={probes}>
-      <div className="flex h-screen flex-col">
+      <div className="flex h-screen flex-col relative">
         <div className="flex flex-col w-full">
           <Navigation>
             <NavLeft>
@@ -40,11 +40,11 @@ const DashboardLayout = async ({
             </NavRight>
           </Navigation>
         </div>
-        <div className="flex flex-row flex-1 max-h-full">
+        <div className="flex flex-row flex-1 h-full">
           <SidebarWithSheet>
             <SidebarContent />
           </SidebarWithSheet>
-          <div className="w-full">{children}</div>
+          <div className="w-full h-full overflow-y-scroll">{children}</div>
         </div>
       </div>
     </DashboardLayoutProvider>
