@@ -16,5 +16,24 @@ export async function POST(_request: Request) {
     }
   });
 
+  const organization = await prismaClient.organization.create({
+    data: {
+      name: 'Organization 1',
+      user: {
+        connect: {
+          id: user.id
+        }
+      }
+    }
+  });
+
+  const project = await prismaClient.project.create({
+    data: {
+      name: 'project 1',
+      owner: user.id,
+      organizationID: organization.id
+    }
+  });
+
   return NextResponse.json({ result: user });
 }

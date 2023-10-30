@@ -127,13 +127,31 @@ export const saveProbe = async (
       revalidateTag(`user-probes`); // to refresh the sidebar
       return { data: result, error: null };
     } else {
-      const project = await prismaClient.project.findFirst({
+      let project = await prismaClient.project.findFirst({
         where: {
           owner: user.id
         }
       });
 
-      if (!project) return serverActionError(`Project not found`);
+      if (!project) {
+        const organization = await prismaClient.organization.create({
+          data: {
+            name: 'Organization 1',
+            user: {
+              connect: {
+                id: user.id
+              }
+            }
+          }
+        });
+        project = await prismaClient.project.create({
+          data: {
+            name: 'Project 1',
+            owner: user.id,
+            organizationID: organization.id
+          }
+        });
+      }
 
       const result = await prismaClient.probe.create({
         data: {
