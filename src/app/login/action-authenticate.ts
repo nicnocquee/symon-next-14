@@ -7,6 +7,7 @@ import { serverActionError } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import * as jose from 'jose';
+import { revalidateTag } from 'next/cache';
 
 export const authenticate = async (data: {
   email: string;
@@ -36,10 +37,14 @@ export const authenticate = async (data: {
     .sign(new TextEncoder().encode(secretKey));
 
   cookies().set(`user`, userJWt);
+  revalidateTag('user-probes');
+  revalidateTag('current-probe');
   redirect(`/dashboard`);
 };
 
 export const logout = async () => {
   cookies().delete(`user`);
+  revalidateTag('user-probes');
+  revalidateTag('current-probe');
   redirect(`/`);
 };
