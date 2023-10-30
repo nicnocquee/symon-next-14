@@ -2,12 +2,12 @@
 
 import { prismaClient } from '@/prisma/prisma-client';
 import { cookies } from 'next/headers';
-import { experimental_taintObjectReference } from 'react';
+import { cache, experimental_taintObjectReference } from 'react';
 import * as jose from 'jose';
 
 import 'server-only';
 
-export const getLoggedInUser = async () => {
+export const _getLoggedInUser = async () => {
   const secretKey = process.env.USER_JWT_KEY;
   if (!secretKey) {
     throw new Error('USER_JWT_KEY is required');
@@ -22,6 +22,7 @@ export const getLoggedInUser = async () => {
       userJWT || '',
       new TextEncoder().encode(secretKey)
     );
+    console.log(`getting the user from database`);
     const user = await prismaClient.user.findFirst({
       where: { id: userJson.payload.id }
     });
@@ -36,3 +37,5 @@ export const getLoggedInUser = async () => {
   }
   return null;
 };
+
+export const getLoggedInUser = cache(_getLoggedInUser);
