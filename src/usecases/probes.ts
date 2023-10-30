@@ -164,6 +164,19 @@ export const saveProbe = async (
           }
         }
       });
+
+      const locations = await prismaClient.location.findMany();
+      await Promise.all(
+        locations.map((l) => {
+          return prismaClient.locationProbe.create({
+            data: {
+              locationId: l.id,
+              probeId: result.id
+            }
+          });
+        })
+      );
+
       revalidatePath(`/dashboard/probe/${result.nanoId}`);
       redirectTo = `/dashboard/probe/${result.nanoId}`;
     }
