@@ -1,7 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { DashboardContext } from './dashboard-context';
 
 const NavTitle = () => {
   const params = useParams();
@@ -12,20 +13,10 @@ const NavTitle = () => {
       : params.nanoid
     : null;
 
-  const [title, setTitle] = useState<ReactNode | null>(null);
+  const { probes } = useContext(DashboardContext);
+  const currentProbe = probes.find((p) => p.nanoId === nanoid);
 
-  useEffect(() => {
-    if (nanoid) {
-      // need to fix this
-      fetch(`/api/v1/probe/${nanoid}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setTitle(data.result.name);
-        });
-    }
-  }, [nanoid]);
-
-  return <>{title}</>;
+  return <>{currentProbe?.name}</>;
 };
 
 export default NavTitle;

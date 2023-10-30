@@ -1,14 +1,19 @@
 import Link from 'next/link';
-import { DashboardLayoutProvider } from './components/dashboard-layout-context';
+import { DashboardLayoutProvider } from './components/dashboard-context';
 import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
 import { EditProbeDialogButton } from './probe/[nanoid]/components/save-probe-button';
 import NavTitle from './components/navigation-title-client';
+import { getProbes } from '@/usecases/probes';
+import { getLoggedInUser } from '@/usecases/user';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+  const user = await getLoggedInUser();
+  const probes = user ? await getProbes(user?.id) : [];
+
   return (
-    <DashboardLayoutProvider>
+    <DashboardLayoutProvider probes={probes}>
       <div className="flex h-screen flex-col">
         <div className="flex flex-col w-full">
           <Navigation>
