@@ -8,7 +8,13 @@ import { getProbes } from '@/usecases/probes';
 import { getLoggedInUser } from '@/usecases/user';
 import { ReactNode } from 'react';
 
-const DashboardLayout = async ({ children }: { children: ReactNode }) => {
+const DashboardLayout = async ({
+  children,
+  probe_name: probeName
+}: {
+  children: ReactNode;
+  probe_name: ReactNode;
+}) => {
   const user = await getLoggedInUser();
   const probes = user ? await getProbes(user?.id) : [];
 
@@ -20,7 +26,7 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
             <NavLeft>
               <SidebarToggleButton />
             </NavLeft>
-            <NavMid>test</NavMid>
+            <NavMid>{probeName}</NavMid>
             <NavRight>
               <EditProbeDialogButton
                 className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
