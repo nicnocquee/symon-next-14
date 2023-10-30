@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    taint: true
+    taint: true,
+    esmExternals: false
   }
 };
 
