@@ -4,9 +4,9 @@ import { NavLeft, NavMid, NavRight, Navigation } from './components/navigation';
 import { SidebarToggleButton, SidebarWithSheet } from './components/sidebar';
 import SidebarContent from './components/sidebar-content';
 import { EditProbeDialogButton } from './probe/[nanoid]/components/save-probe-button';
-import { getProbes } from '@/usecases/probes';
 import { getLoggedInUser } from '@/usecases/user';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
+import { notFound } from 'next/navigation';
 
 const DashboardLayout = async ({
   children,
@@ -16,10 +16,12 @@ const DashboardLayout = async ({
   probe_name: ReactNode;
 }) => {
   const user = await getLoggedInUser();
-  const probes = user ? await getProbes(user?.id) : [];
+  if (!user) {
+    notFound();
+  }
 
   return (
-    <DashboardLayoutProvider probes={probes}>
+    <DashboardLayoutProvider>
       <div className="flex h-screen flex-col relative">
         <div className="flex flex-col w-full">
           <Navigation>
@@ -42,7 +44,9 @@ const DashboardLayout = async ({
         </div>
         <div className="flex flex-row flex-1 h-full">
           <SidebarWithSheet>
-            <SidebarContent />
+            <Suspense fallback={<p>Loading ...</p>}>
+              <SidebarContent />
+            </Suspense>
           </SidebarWithSheet>
           <div className="w-full h-full overflow-y-scroll">{children}</div>
         </div>
