@@ -29,8 +29,8 @@ const DashboardLayout = async ({
           <Navigation>
             <NavLeft>
               <SidebarToggleButton />
+              {probeName}
             </NavLeft>
-            <NavMid>{probeName}</NavMid>
             <NavRight>
               <EditProbeDialogButton
                 className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
