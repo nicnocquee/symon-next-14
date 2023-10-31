@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { probeSummaryForLocation } from './location-summary';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -30,7 +31,11 @@ const LocationPanelContent = ({
     <div className="p-2 border border-gray-200 rounded-md space-y-2">
       <div className="flex flex-row justify-between">
         <p className="font-bold">{city}</p>
-        <p>{status}</p>
+        <Link
+          className="text-red-700 underline"
+          href={`/dashboard/events/${Math.floor(Math.random() * 1000)}`}>
+          {status}
+        </Link>
       </div>
       <p>Last check</p>
       <p className="text-gray-400">{lastCheck}</p>

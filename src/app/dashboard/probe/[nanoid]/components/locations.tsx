@@ -9,7 +9,7 @@ const Locations = async ({ probe }: { probe: getProbeType }) => {
         return (
           <Suspense key={l.id} fallback={<LocationPanelSkeleton />}>
             <LocationPanel
-              probeId={probe.id}
+              probeId={probe?.id}
               locationId={l.id}
               city={l.location.city}
             />
