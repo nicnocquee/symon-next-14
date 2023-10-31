@@ -44,9 +44,9 @@ const DashboardLayout = async ({
         </div>
         <div className="flex flex-row flex-1 h-full">
           <SidebarWithSheet>
-            {/* <Suspense fallback={<p>Loading ...</p>}> */}
-            <SidebarContent />
-            {/* </Suspense> */}
+            <Suspense fallback={<p>Loading ...</p>}>
+              <SidebarContent />
+            </Suspense>
           </SidebarWithSheet>
           <div className="w-full h-full overflow-y-scroll">{children}</div>
         </div>
