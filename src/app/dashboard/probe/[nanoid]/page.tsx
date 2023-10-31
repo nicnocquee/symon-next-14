@@ -25,6 +25,9 @@ const ProbePage = async ({
       {probe.description ? (
         <p className="text-lg text-muted-foreground">{probe.description}</p>
       ) : null}
+      <p className="text-slate-400">
+        Updated at: {probe.updatedAt.toLocaleString()}
+      </p>
 
       <ToggleEnable probe={probe} />
 

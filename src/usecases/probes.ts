@@ -251,7 +251,8 @@ export const toggleProbe = async (formData: FormData) => {
   // use single query
   await prismaClient.$executeRaw`
   UPDATE probe
-  SET "isEnabled" = NOT "isEnabled"
+  SET "isEnabled" = NOT "isEnabled",
+  "updated_at" = CURRENT_TIMESTAMP  -- Sets the created_at to the current date and time
   FROM project
   WHERE
     probe.id = ${probeId} AND

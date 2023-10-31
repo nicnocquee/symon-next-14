@@ -23,7 +23,7 @@ export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
         <Switch id="probe-enabled" type="submit" checked={probeEnabled} />
         <input type="hidden" value={probe.id} name="probeId" />
         <Label htmlFor="probe-enabled">
-          {probe.isEnabled ? 'Active' : 'Disabled'}
+          {probeEnabled ? 'Active' : 'Disabled'}
         </Label>
       </form>
     </div>
