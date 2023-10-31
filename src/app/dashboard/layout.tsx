@@ -10,10 +10,12 @@ import { notFound } from 'next/navigation';
 
 const DashboardLayout = async ({
   children,
-  probe_name: probeName
+  probe_name: probeName,
+  modal
 }: {
   children: ReactNode;
   probe_name: ReactNode;
+  modal: ReactNode;
 }) => {
   const user = await getLoggedInUser();
   if (!user) {
@@ -51,6 +53,7 @@ const DashboardLayout = async ({
           <div className="w-full h-full overflow-y-scroll">{children}</div>
         </div>
       </div>
+      <div>{modal}</div>
     </DashboardLayoutProvider>
   );
 };
