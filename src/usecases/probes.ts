@@ -9,7 +9,7 @@ import {
 } from 'next/cache';
 import { cache as memoize } from 'react';
 
-import { serverActionError, sleep } from '@/lib/utils';
+import { DateToString, serverActionError, sleep } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoid';
@@ -31,11 +31,13 @@ const _getProbes = async (userId: string) => {
       }
     },
     orderBy: {
-      createdAt: 'desc'
+      updatedAt: 'desc'
     }
   });
 
-  return probes;
+  // need to turn it to JSON object so that Date type becomes string.
+  // need to do this because unstable_cache returns serialized version of the cached data
+  return JSON.parse(JSON.stringify(probes)) as DateToString<typeof probes>;
 };
 
 export const getProbes = cache(memoize(_getProbes), ['user-probes'], {
@@ -49,7 +51,7 @@ const _getProbe = async (nanoid: string) => {
   if (!user) {
     throw new Error('Not authenticated');
   }
-  const probe = prismaClient.probe.findFirst({
+  const probe = await prismaClient.probe.findFirst({
     where: {
       nanoId: nanoid,
       project: {
@@ -71,7 +73,9 @@ const _getProbe = async (nanoid: string) => {
     }
   });
 
-  return probe;
+  if (!probe) return null;
+
+  return JSON.parse(JSON.stringify(probe)) as DateToString<typeof probe>;
 };
 
 export const getProbe = cache(memoize(_getProbe), ['current-probe'], {

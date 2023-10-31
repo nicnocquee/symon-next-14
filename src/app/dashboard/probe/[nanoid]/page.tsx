@@ -5,6 +5,7 @@ import { DeleteProbeDialog } from './components/delete-probe-button';
 import Locations from './components/locations';
 import RefreshButton from './components/refresh-button';
 import { ToggleEnable } from './components/toggle-enable';
+import { format } from '@/lib/utils';
 
 const ProbePage = async ({
   params: { nanoid }
@@ -26,7 +27,7 @@ const ProbePage = async ({
         <p className="text-lg text-muted-foreground">{probe.description}</p>
       ) : null}
       <p className="text-slate-400">
-        Updated at: {probe.updatedAt.toLocaleString()}
+        Updated at: {format(probe.updatedAt, 'dd-MM-yyyy HH:mm:ss')}
       </p>
 
       <ToggleEnable probe={probe} />
