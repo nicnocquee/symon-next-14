@@ -8,6 +8,7 @@ const RefreshButton = () => {
         'use server';
         revalidateTag('current-probe');
         revalidateTag('probe-summary-location');
+        revalidateTag('user-probes');
       }}>
       <Button type="submit">Refresh</Button>
     </form>

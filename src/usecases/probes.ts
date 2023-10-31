@@ -42,7 +42,8 @@ const _getProbes = async (userId: string) => {
 };
 
 export const getProbes = cache(memoize(_getProbes), ['user-probes'], {
-  tags: ['user-probes']
+  tags: ['user-probes'],
+  revalidate: 10
 });
 export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
 
@@ -80,7 +81,8 @@ const _getProbe = async (nanoid: string) => {
 };
 
 export const getProbe = cache(memoize(_getProbe), ['current-probe'], {
-  tags: ['current-probe']
+  tags: ['current-probe'],
+  revalidate: 10
 });
 export type getProbeType = Awaited<ReturnType<typeof getProbe>>;
 
@@ -229,10 +231,14 @@ export const getProbesHealth = cache(
 );
 
 export const toggleProbe = async (formData: FormData) => {
-  console.log(`toggling probe`);
-  const { probeId } = z
-    .object({ probeId: z.string().min(1) })
+  const { probeId, isEnabled } = z
+    .object({
+      probeId: z.string().min(1),
+      isEnabled: z.coerce.number().transform((arg) => arg === 1)
+    })
     .parse(Object.fromEntries(formData.entries()));
+  console.log(`toggling probe: ${isEnabled}`);
+
   const user = await getLoggedInUser();
   // const probe = await prismaClient.probe.findFirst({
   // where: {
@@ -245,28 +251,31 @@ export const toggleProbe = async (formData: FormData) => {
   // if (!probe) {
   //   return serverActionError(`Probe not found`);
   // }
-  // await prismaClient.probe.update({
-  //   where: {
-  //     id: probe?.id
-  //   },
-  //   data: {
-  //     isEnabled: !probe.isEnabled
-  //   }
-  // });
+  await prismaClient.probe.update({
+    where: {
+      id: probeId,
+      project: {
+        owner: user?.id
+      }
+    },
+    data: {
+      isEnabled
+    }
+  });
 
   // use single query
-  await prismaClient.$executeRaw`
-  UPDATE probe
-  SET "isEnabled" = NOT "isEnabled",
-  "updated_at" = CURRENT_TIMESTAMP  -- Sets the created_at to the current date and time
-  FROM project
-  WHERE
-    probe.id = ${probeId} AND
-    probe.project_id = project.id AND
-    project.owner = ${user?.id}
-  `;
+  // await prismaClient.$executeRaw`
+  // UPDATE probe
+  // SET "isEnabled" = NOT "isEnabled",
+  // "updated_at" = CURRENT_TIMESTAMP  -- Sets the created_at to the current date and time
+  // FROM project
+  // WHERE
+  //   probe.id = ${probeId} AND
+  //   probe.project_id = project.id AND
+  //   project.owner = ${user?.id}
+  // `;
 
-  console.log('updating probe');
+  console.log('revalidating probe');
 
   revalidateTag('current-probe');
   revalidateTag('user-probes'); // for the sidebar

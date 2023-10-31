@@ -9,6 +9,7 @@ const SidebarContent = async () => {
     return null;
   }
   const probes = await getProbes(user.id);
+  console.log(`getting new probes in SidebarContent`);
   return (
     <div className="flex flex-col p-4">
       <div className="">

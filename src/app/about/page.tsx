@@ -14,9 +14,9 @@ const AboutPage = async () => {
       <form
         action={async () => {
           'use server';
-          console.log('here');
           revalidateTag('get-nano-id');
           revalidateTag('get-server-time');
+          revalidateTag('user-probes');
         }}>
         <button>Refresh</button>
       </form>

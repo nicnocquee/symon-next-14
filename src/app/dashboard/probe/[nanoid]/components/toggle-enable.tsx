@@ -35,6 +35,7 @@ export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
             });
           }}
         />
+        <input type="hidden" value={probeEnabled ? 1 : 0} name="isEnabled" />
         <input type="hidden" value={probe.id} name="probeId" />
         <Label htmlFor="probe-enabled">
           {probeEnabled ? 'Active' : 'Disabled'}
