@@ -230,11 +230,10 @@ export const getProbesHealth = cache(
 );
 
 export const toggleProbe = async (formData: FormData) => {
-  const { probeId, isEnabled, description } = z
+  const { probeId, isEnabled } = z
     .object({
       probeId: z.string().min(1),
-      isEnabled: z.coerce.number().transform((arg) => arg === 1),
-      description: z.optional(z.string())
+      isEnabled: z.coerce.number().transform((arg) => arg === 1)
     })
     .parse(Object.fromEntries(formData.entries()));
   console.log(`toggling probe: ${isEnabled}`);
@@ -259,8 +258,7 @@ export const toggleProbe = async (formData: FormData) => {
       }
     },
     data: {
-      isEnabled,
-      description
+      isEnabled
     }
   });
 
@@ -278,7 +276,7 @@ export const toggleProbe = async (formData: FormData) => {
   //   project.owner = ${user?.id}
   // `;
 
-  console.log('revalidating probe', description, probeId);
+  console.log('revalidating probe', probeId);
 
   revalidateTag('dashboard');
 };
