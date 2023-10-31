@@ -18,6 +18,7 @@ import * as z from 'zod';
 
 const _getProbes = async (userId: string) => {
   console.log(`__getProbes`);
+  // await sleep(10);
   const user = await getLoggedInUser();
   if (!user) {
     throw new Error('Not authenticated');
