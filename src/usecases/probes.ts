@@ -229,6 +229,7 @@ export const getProbesHealth = cache(
 );
 
 export const toggleProbe = async (formData: FormData) => {
+  console.log(`toggling probe`);
   const { probeId } = z
     .object({ probeId: z.string().min(1) })
     .parse(Object.fromEntries(formData.entries()));
@@ -264,6 +265,8 @@ export const toggleProbe = async (formData: FormData) => {
     probe.project_id = project.id AND
     project.owner = ${user?.id}
   `;
+
+  console.log('updating probe');
 
   revalidateTag('current-probe');
   revalidateTag('user-probes'); // for the sidebar
