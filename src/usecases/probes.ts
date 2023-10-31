@@ -42,7 +42,7 @@ const _getProbes = async (userId: string) => {
 };
 
 export const getProbes = cache(memoize(_getProbes), ['user-probes'], {
-  tags: ['user-probes'],
+  tags: ['dashboard'],
   revalidate: 10
 });
 export type getProbesType = Awaited<ReturnType<typeof getProbes>>;
@@ -81,7 +81,7 @@ const _getProbe = async (nanoid: string) => {
 };
 
 export const getProbe = cache(memoize(_getProbe), ['current-probe'], {
-  tags: ['current-probe'],
+  tags: ['dashboard'],
   revalidate: 10
 });
 export type getProbeType = Awaited<ReturnType<typeof getProbe>>;
@@ -130,8 +130,7 @@ export const saveProbe = async (
           ...rest
         }
       });
-      revalidateTag(`current-probe`); // to refresh the main area of probe page
-      revalidateTag(`user-probes`); // to refresh the sidebar
+      revalidateTag(`dashboard`); // to refresh the main area of probe page and sidebar
       return { data: result, error: null };
     } else {
       let project = await prismaClient.project.findFirst({
@@ -231,10 +230,11 @@ export const getProbesHealth = cache(
 );
 
 export const toggleProbe = async (formData: FormData) => {
-  const { probeId, isEnabled } = z
+  const { probeId, isEnabled, description } = z
     .object({
       probeId: z.string().min(1),
-      isEnabled: z.coerce.number().transform((arg) => arg === 1)
+      isEnabled: z.coerce.number().transform((arg) => arg === 1),
+      description: z.optional(z.string())
     })
     .parse(Object.fromEntries(formData.entries()));
   console.log(`toggling probe: ${isEnabled}`);
@@ -251,7 +251,7 @@ export const toggleProbe = async (formData: FormData) => {
   // if (!probe) {
   //   return serverActionError(`Probe not found`);
   // }
-  await prismaClient.probe.update({
+  const probe = await prismaClient.probe.update({
     where: {
       id: probeId,
       project: {
@@ -259,9 +259,12 @@ export const toggleProbe = async (formData: FormData) => {
       }
     },
     data: {
-      isEnabled
+      isEnabled,
+      description
     }
   });
+
+  console.log({ updatedProbe: probe });
 
   // use single query
   // await prismaClient.$executeRaw`
@@ -275,8 +278,7 @@ export const toggleProbe = async (formData: FormData) => {
   //   project.owner = ${user?.id}
   // `;
 
-  console.log('revalidating probe');
+  console.log('revalidating probe', description, probeId);
 
-  revalidateTag('current-probe');
-  revalidateTag('user-probes'); // for the sidebar
+  revalidateTag('dashboard');
 };

@@ -44,3 +44,36 @@ export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
     </div>
   );
 }
+
+/*
+export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
+  const [checked, setChecked] = useState(probe.isEnabled);
+  return (
+    <div>
+      <form
+        action={async (formData: FormData) => {
+          formData.set('isEnabled', checked ? '1' : '0');
+          const theDate = new Date().toISOString();
+          formData.set('description', theDate);
+          console.log({
+            isEnabled: checked,
+            description: theDate
+          });
+          await toggleProbe(formData);
+        }}
+        className="flex items-center space-x-2">
+        <Switch
+          id="probe-enabled"
+          type="submit"
+          checked={checked}
+          onCheckedChange={setChecked}
+        />
+        <input type="hidden" value={probe.id} name="probeId" />
+        <Label htmlFor="probe-enabled">
+          {probe.isEnabled ? 'Active' : 'Disabled'}
+        </Label>
+      </form>
+    </div>
+  );
+}
+*/

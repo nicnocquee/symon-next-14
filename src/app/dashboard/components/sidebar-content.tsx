@@ -9,7 +9,8 @@ const SidebarContent = async () => {
     return null;
   }
   const probes = await getProbes(user.id);
-  console.log(`getting new probes in SidebarContent`);
+  // console.log(`getting new probes in SidebarContent`);
+  // console.log(probes.find((p) => p.nanoId === 'M57eK7d'));
   return (
     <div className="flex flex-col p-4">
       <div className="">

@@ -1,5 +1,5 @@
 const MonitorsPageLoading = () => {
-  return <div>Loading ...</div>;
+  return <div>Loading monitors ...</div>;
 };
 
 export default MonitorsPageLoading;

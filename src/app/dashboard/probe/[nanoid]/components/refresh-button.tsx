@@ -6,9 +6,8 @@ const RefreshButton = () => {
     <form
       action={async () => {
         'use server';
-        revalidateTag('current-probe');
         revalidateTag('probe-summary-location');
-        revalidateTag('user-probes');
+        revalidateTag('dashboard');
       }}>
       <Button type="submit">Refresh</Button>
     </form>
