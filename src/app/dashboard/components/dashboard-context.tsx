@@ -1,7 +1,7 @@
 'use client';
 
 import { getProbesType } from '@/usecases/probes';
-import { ReactNode, createContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 
 export const DashboardContext = createContext({
   isSideBarOpen: true,
