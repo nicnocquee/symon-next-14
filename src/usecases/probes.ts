@@ -228,25 +228,36 @@ export const toggleProbe = async (formData: FormData) => {
     .object({ probeId: z.string().min(1) })
     .parse(Object.fromEntries(formData.entries()));
   const user = await getLoggedInUser();
-  const probe = await prismaClient.probe.findFirst({
-    where: {
-      id: probeId,
-      project: {
-        owner: user?.id
-      }
-    }
-  });
-  if (!probe) {
-    return serverActionError(`Probe not found`);
-  }
-  await prismaClient.probe.update({
-    where: {
-      id: probe?.id
-    },
-    data: {
-      isEnabled: !probe.isEnabled
-    }
-  });
+  // const probe = await prismaClient.probe.findFirst({
+  // where: {
+  //   id: probeId,
+  //   project: {
+  //     owner: user?.id
+  //   }
+  // }
+  // });
+  // if (!probe) {
+  //   return serverActionError(`Probe not found`);
+  // }
+  // await prismaClient.probe.update({
+  //   where: {
+  //     id: probe?.id
+  //   },
+  //   data: {
+  //     isEnabled: !probe.isEnabled
+  //   }
+  // });
+
+  // use single query
+  await prismaClient.$executeRaw`
+  UPDATE probe
+  SET "isEnabled" = NOT "isEnabled"
+  FROM project
+  WHERE
+    probe.id = ${probeId} AND
+    probe.project_id = project.id AND
+    project.owner = ${user?.id}
+  `;
 
   revalidateTag('current-probe');
   revalidateTag('user-probes'); // for the sidebar
