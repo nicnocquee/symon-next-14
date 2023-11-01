@@ -14,11 +14,6 @@ export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
     }
   );
 
-  console.log({
-    optimisticValue: probeEnabled,
-    realValue: probe.isEnabled
-  });
-
   return (
     <div>
       <form action={toggleProbe} className="flex items-center space-x-2">
@@ -44,7 +39,6 @@ const EnableToggle = ({
   setProbeEnabled: (action: boolean) => void;
 }) => {
   const { pending } = useFormStatus();
-  console.log(pending);
   return (
     <Switch
       disabled={pending}
