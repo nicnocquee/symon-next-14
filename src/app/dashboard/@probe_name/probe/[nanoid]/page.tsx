@@ -7,7 +7,7 @@ const ProbeName = async ({
 }) => {
   const probe = await getProbe(nanoid);
 
-  return <>{probe?.name || 'My Monitors'}</>;
+  return <div className="pl-4 lg:pl-0">{probe?.name || 'My Monitors'}</div>;
 };
 
 export default ProbeName;

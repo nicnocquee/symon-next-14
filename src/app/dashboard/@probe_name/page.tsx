@@ -1,5 +1,5 @@
 const ProbeName = async () => {
-  return <>{`My MONITORS`}</>;
+  return <div className="hidden lg:block">{`My MONITORS`}</div>;
 };
 
 export default ProbeName;
