@@ -25,7 +25,7 @@ const DashboardLayout = async ({
   return (
     <DashboardLayoutProvider>
       <div className="flex h-screen flex-col relative">
-        <div className="flex flex-col w-full">
+        <div className="absolute w-full">
           <Navigation>
             <NavLeft>
               <SidebarToggleButton />
@@ -44,7 +44,7 @@ const DashboardLayout = async ({
             </NavRight>
           </Navigation>
         </div>
-        <div className="flex flex-row flex-1 h-full">
+        <div className="flex flex-row flex-1 h-full pt-16">
           <SidebarWithSheet>
             <Suspense fallback={<p>Loading ...</p>}>
               <SidebarContent />
