@@ -4,7 +4,7 @@ import * as jose from 'jose';
 import { cookies } from 'next/headers';
 
 export const config = {
-  matcher: ['/dashboard/:path*']
+  matcher: ['/dashboard/:path*', '/login']
 };
 
 export async function middleware(req: NextRequest) {
