@@ -44,9 +44,7 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
       <div className="block sm:hidden h-full">
         <Sheet open={isSideBarOpen} onOpenChange={toggleSideBar}>
           <SheetContent side="left">
-            <div className="max-h-full">
-              <ScrollArea className="h-full">{children}</ScrollArea>
-            </div>
+            <ScrollArea className="h-full">{children}</ScrollArea>
           </SheetContent>
         </Sheet>
       </div>
@@ -58,9 +56,19 @@ export const SidebarToggleButton = () => {
   const { isSideBarOpen, toggleSideBar } = useContext(DashboardContext);
   return (
     <button
-      className="ml-auto block lg:hidden text-white"
+      className="ml-auto block lg:hidden text-foreground"
       onClick={toggleSideBar}>
-      {isSideBarOpen ? 'Close' : 'Open'}
+      {isSideBarOpen ? '' : <BurgerMenu />}
     </button>
+  );
+};
+
+const BurgerMenu = () => {
+  return (
+    <div className="space-y-1">
+      <div className="w-6 h-0.5 bg-gray-600"></div>
+      <div className="w-6 h-0.5 bg-gray-600"></div>
+      <div className="w-6 h-0.5 bg-gray-600"></div>
+    </div>
   );
 };
