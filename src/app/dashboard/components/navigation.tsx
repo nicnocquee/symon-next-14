@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 export const Navigation = ({ children }: { children?: ReactNode }) => {
   return (
-    <div className="bg-gray-800 text-white p-4 flex flex-row justify-between ">
+    <div className="text-foreground p-1 flex flex-row justify-between border-b-slate-300 border-b shadow-md">
       {children}
     </div>
   );

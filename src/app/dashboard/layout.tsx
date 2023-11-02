@@ -9,6 +9,7 @@ import { getLoggedInUser } from '@/usecases/user';
 import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { ProbesProvider } from './components/data-probes';
+import { Button } from '@/components/ui/button';
 
 const DashboardLayout = async ({
   children,
@@ -35,14 +36,13 @@ const DashboardLayout = async ({
             </NavLeft>
             <NavRight>
               <EditProbeDialogButton
-                className={`text-white bg-transparent border-none hover:bg-transparent hover:text-white`}
+                className={`text-foreground bg-transparent border-none`}
               />
-              <Link
-                prefetch={false}
-                className="[&>a]:underline"
-                href="/api/logout">
-                Logout
-              </Link>
+              <Button variant="ghost">
+                <Link prefetch={false} href="/api/logout">
+                  Logout
+                </Link>
+              </Button>
             </NavRight>
           </Navigation>
         </div>
