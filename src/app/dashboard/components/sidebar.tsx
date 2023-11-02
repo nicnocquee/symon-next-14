@@ -4,6 +4,7 @@ import { ReactNode, useContext } from 'react';
 import { DashboardContext } from './dashboard-context';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const Sidebar = ({ children }: { children?: ReactNode }) => {
   const { isSideBarOpen } = useContext(DashboardContext);
@@ -35,15 +36,17 @@ export const SidebarWithSheet = ({ children }: { children?: ReactNode }) => {
   return (
     <div>
       {/* Desktop sidebar */}
-      <div className="w-80 hidden h-full lg:block overflow-y-scroll">
-        {children}
+      <div className="w-80 hidden h-full lg:block">
+        <ScrollArea className="h-full">{children}</ScrollArea>
       </div>
 
       {/* Mobile sidebar */}
       <div className="block sm:hidden h-full">
         <Sheet open={isSideBarOpen} onOpenChange={toggleSideBar}>
           <SheetContent side="left">
-            <div className="overflow-y-scroll max-h-full">{children}</div>
+            <div className="max-h-full">
+              <ScrollArea className="h-full">{children}</ScrollArea>
+            </div>
           </SheetContent>
         </Sheet>
       </div>

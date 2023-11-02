@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { MonitorsTable } from './components/monitors-table';
 import * as z from 'zod';
 import Link from 'next/link';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const DashboardPage = async ({
   searchParams
@@ -24,11 +25,13 @@ const DashboardPage = async ({
 
   const probes = await getProbes(user?.id);
   return (
-    <div className="w-full p-4">
-      <Pagination total={probes.length} from={from} perPage={perPage} />
-      <MonitorsTable probes={probes} from={from} perPage={perPage} />
-      <Pagination total={probes.length} from={from} perPage={perPage} />
-    </div>
+    <ScrollArea className="h-full">
+      <div className="w-full p-4">
+        <Pagination total={probes.length} from={from} perPage={perPage} />
+        <MonitorsTable probes={probes} from={from} perPage={perPage} />
+        <Pagination total={probes.length} from={from} perPage={perPage} />
+      </div>
+    </ScrollArea>
   );
 };
 

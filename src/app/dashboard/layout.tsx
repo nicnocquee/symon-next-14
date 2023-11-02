@@ -46,7 +46,9 @@ const DashboardLayout = async ({
             </NavRight>
           </Navigation>
         </div>
-        <div className="flex flex-row" style={{ height: 'calc(100% - 72px)' }}>
+        <div
+          className="flex flex-row space-x-4"
+          style={{ height: 'calc(100% - 72px)' }}>
           <SidebarWithSheet>
             <Suspense fallback={<p>Loading ...</p>}>
               {/* <SidebarContent /> */}
