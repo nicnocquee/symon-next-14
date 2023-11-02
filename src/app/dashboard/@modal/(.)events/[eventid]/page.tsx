@@ -1,44 +1,14 @@
-'use client';
+import { getEvent } from '@/app/dashboard/events/[eventid]/data-event';
+import ModalEventDetailPage from './modal-event-detail';
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog';
-import { useRouter } from 'next/navigation';
-
-const ModalEventDetailPage = ({
+const ModalEventPage = async ({
   params: { eventid }
 }: {
   params: { eventid: string };
 }) => {
-  const router = useRouter();
-  return (
-    <div>
-      <AlertDialog open={true}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Event {eventid}</AlertDialogTitle>
-            <AlertDialogDescription>
-              Some event details here
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel
-              onClick={() => {
-                router.back();
-              }}>
-              Close
-            </AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-  );
+  const event = await getEvent(eventid);
+
+  return <ModalEventDetailPage event={event} />;
 };
 
-export default ModalEventDetailPage;
+export default ModalEventPage;

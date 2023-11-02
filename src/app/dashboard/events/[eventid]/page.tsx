@@ -1,16 +1,18 @@
+import { getEvent } from './data-event';
+
 const EventDetailPage = async ({
   params: { eventid }
 }: {
   params: { eventid: string };
 }) => {
-  // .. get the events
+  const event = await getEvent(eventid);
 
   return (
     <div className="p-4">
       <h1 className="scroll-m-20 text-4xl font-bold tracking-tight">
-        Event {eventid}
+        {event.name}
       </h1>
-      <p>Details of the event here</p>
+      <p>{event.description}</p>
     </div>
   );
 };
