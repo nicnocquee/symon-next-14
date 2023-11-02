@@ -10,7 +10,7 @@ const SearchInput = ({
 }: {
   search: (keyword: string) => Promise<ReactNode>;
 }) => {
-  const [data, setData] = useState<string | null>(null);
+  const [keyword, setKeyword] = useState<string | null>(null);
   return (
     <div className="flex flex-col space-y-2 max-w-lg mx-auto w-full">
       <Card>
@@ -23,12 +23,12 @@ const SearchInput = ({
               type="text"
               placeholder="search something ..."
               onChange={(e) => {
-                setData(e.currentTarget.value);
+                setKeyword(e.currentTarget.value);
               }}
             />
-            {data ? (
+            {keyword ? (
               <Suspense fallback={<LoadingSpinner text="Searching ..." />}>
-                {search(data)}
+                {search(keyword)}
               </Suspense>
             ) : null}
           </div>
