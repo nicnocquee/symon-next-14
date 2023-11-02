@@ -2,6 +2,7 @@
 
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/components/ui/use-toast';
 import { getProbeType, toggleProbe } from '@/usecases/probes';
 import { startTransition, useOptimistic } from 'react';
 import { useFormStatus } from 'react-dom';
@@ -14,9 +15,20 @@ export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
     }
   );
 
+  const { toast } = useToast();
   return (
     <div>
-      <form action={toggleProbe} className="flex items-center space-x-2">
+      <form
+        action={async (formData) => {
+          await toggleProbe(formData);
+          toast({
+            title: 'Monitor updated',
+            description: `Monitor ${probe.name} is ${
+              probeEnabled ? 'enabled' : 'disabled'
+            }`
+          });
+        }}
+        className="flex items-center space-x-2">
         <EnableToggle
           probeEnabled={probeEnabled}
           setProbeEnabled={setProbeEnabled}
