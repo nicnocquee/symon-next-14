@@ -23,6 +23,10 @@ export const sleep = async (durationSeconds: number) => {
   });
 };
 
+export const sleepRandom = async (max: number = 5) => {
+  return sleep(Math.floor(Math.random() * max));
+};
+
 export const format = (input: Date | string, fmt: string) => {
   if (typeof input === 'string') {
     return formatFNS(parseISO(input), fmt);

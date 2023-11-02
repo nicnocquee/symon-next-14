@@ -1,5 +1,7 @@
+import LoadingSpinner from '@/components/ui/loading';
+
 const EventPageLoading = () => {
-  return <div className="w-full p-4 space-y-2">Loading event ...</div>;
+  return <LoadingSpinner text="Loading event ..." />;
 };
 
 export default EventPageLoading;

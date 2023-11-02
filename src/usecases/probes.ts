@@ -9,7 +9,7 @@ import {
 } from 'next/cache';
 import { cache as memoize } from 'react';
 
-import { DateToString, serverActionError, sleep } from '@/lib/utils';
+import { DateToString, serverActionError, sleepRandom } from '@/lib/utils';
 import { getLoggedInUser } from './user';
 import { saveProbeSchema } from '@/app/dashboard/probe/[nanoid]/components/save-probe-form';
 import { nanoid } from 'nanoid';
@@ -18,7 +18,7 @@ import * as z from 'zod';
 
 const _getProbes = async (userId: string) => {
   console.log(`__getProbes`);
-  // await sleep(10);
+  await sleepRandom();
   const user = await getLoggedInUser();
   if (!user) {
     throw new Error('Not authenticated');
@@ -207,7 +207,7 @@ const _getProbesHealth = async (probeIdStrings: string) => {
     throw new Error('Not authenticated');
   }
 
-  await sleep(4);
+  await sleepRandom();
 
   // get the healths of the probes from db
 

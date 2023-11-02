@@ -4,6 +4,7 @@ import {
   AlertDialogDescription,
   AlertDialogHeader
 } from '@/components/ui/alert-dialog';
+import LoadingSpinner from '@/components/ui/loading';
 
 const EventPageLoading = () => {
   return (
@@ -11,7 +12,9 @@ const EventPageLoading = () => {
       <AlertDialog open={true}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogDescription>{`Loading event ...`}</AlertDialogDescription>
+            <AlertDialogDescription>
+              <LoadingSpinner text="Loading event ..." />
+            </AlertDialogDescription>
           </AlertDialogHeader>
         </AlertDialogContent>
       </AlertDialog>

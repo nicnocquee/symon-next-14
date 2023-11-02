@@ -1,5 +1,7 @@
+import LoadingSpinner from '@/components/ui/loading';
+
 const ProbePageLoading = () => {
-  return <div className="w-full p-4 space-y-2">Loading probe ...</div>;
+  return <LoadingSpinner text="Loading probes ..." />;
 };
 
 export default ProbePageLoading;

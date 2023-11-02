@@ -1,7 +1,7 @@
-import { sleep } from '@/lib/utils';
+import { sleepRandom } from '@/lib/utils';
 
 export const getEvent = async (eventId: string) => {
-  await sleep(Math.floor(Math.random() * 5));
+  await sleepRandom();
 
   return {
     id: eventId,
