@@ -3,7 +3,7 @@
 import 'server-only';
 import { prismaClient } from '@/prisma/prisma-client';
 import { compareHash } from '@/lib/password';
-import { serverActionError } from '@/lib/utils';
+import { serverActionError, sleepRandom } from '@/lib/utils';
 import { RedirectType, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import * as jose from 'jose';
@@ -43,6 +43,7 @@ export const authenticate = async (data: {
 };
 
 export const logout = async () => {
+  await sleepRandom();
   cookies().delete(`user`);
   revalidateTag('user-probes');
   revalidateTag('current-probe');

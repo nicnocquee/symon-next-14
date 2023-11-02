@@ -10,6 +10,7 @@ import { ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { ProbesProvider } from './components/data-probes';
 import { Button } from '@/components/ui/button';
+import Logout from './components/logout';
 
 const DashboardLayout = async ({
   children,
@@ -38,11 +39,7 @@ const DashboardLayout = async ({
               <EditProbeDialogButton
                 className={`text-foreground bg-transparent border-none`}
               />
-              <Button variant="ghost">
-                <Link prefetch={false} href="/api/logout">
-                  Logout
-                </Link>
-              </Button>
+              <Logout />
             </NavRight>
           </Navigation>
         </div>
