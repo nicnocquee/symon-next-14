@@ -4,7 +4,7 @@ import 'server-only';
 import { prismaClient } from '@/prisma/prisma-client';
 import { compareHash } from '@/lib/password';
 import { serverActionError } from '@/lib/utils';
-import { redirect } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import * as jose from 'jose';
 import { revalidateTag } from 'next/cache';
@@ -46,5 +46,5 @@ export const logout = async () => {
   cookies().delete(`user`);
   revalidateTag('user-probes');
   revalidateTag('current-probe');
-  redirect(`/`);
+  redirect(`/`, RedirectType.replace);
 };
