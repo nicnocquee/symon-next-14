@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import LoadingSpinner from '@/components/ui/loading';
 import { ReactNode, Suspense, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorBoundary } from 'react-error-boundary';
+import { fallbackRender } from './search-error';
 
 const SearchInput = ({
   search
@@ -27,9 +29,15 @@ const SearchInput = ({
               }}
             />
             {keyword ? (
-              <Suspense fallback={<LoadingSpinner text="Searching ..." />}>
-                {search(keyword)}
-              </Suspense>
+              <ErrorBoundary
+                fallbackRender={fallbackRender}
+                onReset={() => {
+                  setKeyword(`${keyword} `);
+                }}>
+                <Suspense fallback={<LoadingSpinner text="Searching ..." />}>
+                  {search(keyword)}
+                </Suspense>
+              </ErrorBoundary>
             ) : null}
           </div>
         </CardContent>

@@ -42,3 +42,10 @@ export type DateToString<T> = {
     ? DateToString<T[P]>
     : T[P];
 };
+
+export const getRandomElement = (arr: any[]) =>
+  arr[Math.floor(Math.random() * arr.length)];
+
+export const randomBool = () => {
+  return getRandomElement([true, false]);
+};
