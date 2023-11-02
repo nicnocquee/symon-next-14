@@ -39,6 +39,7 @@ export const authenticate = async (data: {
   cookies().set(`user`, userJWt);
   revalidateTag('user-probes');
   revalidateTag('current-probe');
+  revalidateTag('probes-health');
   redirect(`/dashboard`);
 };
 
@@ -47,5 +48,6 @@ export const logout = async () => {
   cookies().delete(`user`);
   revalidateTag('user-probes');
   revalidateTag('current-probe');
+  revalidateTag('probes-health');
   redirect(`/`, RedirectType.replace);
 };
