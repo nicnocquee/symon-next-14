@@ -13,6 +13,7 @@ import Link from 'next/link';
 import MonitorHealth from './monitor-health';
 import { Suspense } from 'react';
 import { cn } from '@/lib/utils';
+import { Spinner } from '@/components/ui/loading';
 
 export function MonitorsTable({
   probes = [],
@@ -52,7 +53,7 @@ export function MonitorsTable({
                 </TableCell>
                 <TableCell>
                   {p.isEnabled ? (
-                    <Suspense fallback={<>Loading</>}>
+                    <Suspense fallback={<Spinner />}>
                       <MonitorHealth probeId={p.id} />
                     </Suspense>
                   ) : (
