@@ -28,7 +28,7 @@ const LocationPanelContent = ({
   responseTime: string;
 }) => {
   return (
-    <div className="p-2 border border-gray-200 rounded-md space-y-2">
+    <div className="p-4 border border-gray-200 rounded-md space-y-2">
       <div className="flex flex-row justify-between">
         <p className="font-bold">{city}</p>
         <Link
