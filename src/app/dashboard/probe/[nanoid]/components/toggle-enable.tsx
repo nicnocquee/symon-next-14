@@ -1,6 +1,7 @@
 'use client';
 
 import { Label } from '@/components/ui/label';
+import LoadingSpinner from '@/components/ui/loading';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
 import { getProbeType, toggleProbe } from '@/usecases/probes';
@@ -35,9 +36,6 @@ export function ToggleEnable({ probe }: { probe: NonNullable<getProbeType> }) {
         />
         <input type="hidden" value={probeEnabled ? 1 : 0} name="isEnabled" />
         <input type="hidden" value={probe.id} name="probeId" />
-        <Label htmlFor="probe-enabled">
-          {probeEnabled ? 'Active' : 'Disabled'}
-        </Label>
       </form>
     </div>
   );
@@ -52,17 +50,26 @@ const EnableToggle = ({
 }) => {
   const { pending } = useFormStatus();
   return (
-    <Switch
-      disabled={pending}
-      id="probe-enabled"
-      type="submit"
-      checked={probeEnabled}
-      onCheckedChange={(checked) => {
-        startTransition(() => {
-          setProbeEnabled(checked);
-        });
-      }}
-    />
+    <>
+      <Switch
+        disabled={pending}
+        id="probe-enabled"
+        type="submit"
+        checked={probeEnabled}
+        onCheckedChange={(checked) => {
+          startTransition(() => {
+            setProbeEnabled(checked);
+          });
+        }}
+      />
+      {pending ? (
+        <LoadingSpinner text="Updating ..." className="w-auto" />
+      ) : (
+        <Label htmlFor="probe-enabled">
+          {probeEnabled ? 'Active' : 'Disabled'}
+        </Label>
+      )}
+    </>
   );
 };
 

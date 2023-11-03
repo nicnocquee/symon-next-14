@@ -1,6 +1,18 @@
-const LoadingSpinner = ({ text = 'Loading ...' }: { text?: string }) => {
+import { cn } from '@/lib/utils';
+
+const LoadingSpinner = ({
+  text = 'Loading ...',
+  className
+}: {
+  text?: string;
+  className?: string;
+}) => {
   return (
-    <div className="w-full h-full flex flex-row justify-center items-center p-4 space-x-2">
+    <div
+      className={cn(
+        'w-full h-full flex flex-row justify-center items-center p-4 space-x-2',
+        className
+      )}>
       <Spinner />
       <p className="text-sm text-muted-foreground">{text}</p>
     </div>
