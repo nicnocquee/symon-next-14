@@ -5,7 +5,7 @@
 import { faker } from '@faker-js/faker';
 import { SearchResult } from './search-result';
 
-export const search = async (keyword: string) => {
+export const searchAction = async (keyword: string) => {
   'use server';
 
   console.log(keyword);

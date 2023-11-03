@@ -18,7 +18,7 @@ import * as z from 'zod';
 
 const _getProbes = async (userId: string) => {
   console.log(`__getProbes`);
-  await sleepRandom();
+  // await sleepRandom();
   const user = await getLoggedInUser();
   if (!user) {
     throw new Error('Not authenticated');
@@ -207,7 +207,7 @@ const _getProbesHealth = async (probeIdStrings: string) => {
     throw new Error('Not authenticated');
   }
 
-  await sleepRandom();
+  // await sleepRandom();
 
   // get the healths of the probes from db
 

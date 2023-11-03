@@ -44,7 +44,7 @@ export const authenticate = async (data: {
 };
 
 export const logout = async () => {
-  await sleepRandom();
+  // await sleepRandom();
   cookies().delete(`user`);
   revalidateTag('user-probes');
   revalidateTag('current-probe');
