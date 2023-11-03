@@ -20,31 +20,37 @@ const ProbePage = async ({
 
   return (
     <ScrollArea className="h-full">
-      <div className="py-4 space-y-2 px-4 w-full">
-        <span>Monitor {nanoid}</span>
-        <h1 className="scroll-m-20 text-4xl font-bold tracking-tight">
-          {probe.name}
-        </h1>
-        {probe.description ? (
-          <p className="text-lg text-muted-foreground">{probe.description}</p>
-        ) : null}
-        <p className="text-slate-400">
-          Updated at: {format(probe.updatedAt, 'dd-MM-yyyy HH:mm:ss')}
-        </p>
+      <div className="py-4 space-y-8 px-4 w-full">
+        <div className="flex flex-row justify-between">
+          <div className="space-y-2">
+            <span>Monitor {nanoid}</span>
+            <h1 className="scroll-m-20 text-4xl font-bold tracking-tight">
+              {probe.name}
+            </h1>
+            {probe.description ? (
+              <p className="text-lg text-muted-foreground">
+                {probe.description}
+              </p>
+            ) : null}
+            <p className="text-slate-400">
+              Updated at: {format(probe.updatedAt, 'dd-MM-yyyy HH:mm:ss')}
+            </p>
 
-        <ToggleEnable probe={probe} />
+            <ToggleEnable probe={probe} />
+          </div>
 
-        <div className="flex flex-col space-y-2 items-start">
-          <EditProbeDialogButton
-            initialData={{
-              name: probe.name,
-              id: probe.id,
-              description: probe.description || ''
-            }}
-          />
+          <div className="flex flex-row space-x-2 items-start">
+            <EditProbeDialogButton
+              initialData={{
+                name: probe.name,
+                id: probe.id,
+                description: probe.description || ''
+              }}
+            />
 
-          <DeleteProbeDialog id={probe.id} name={probe.name} />
-          <RefreshButton />
+            <DeleteProbeDialog id={probe.id} name={probe.name} />
+            <RefreshButton />
+          </div>
         </div>
 
         <div>
